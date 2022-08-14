@@ -1,0 +1,171 @@
+{
+	"layouts": {
+		"diatonicG": {
+			"sign": "G",
+			"type": "diatonic",
+			"label": "Diatonic G Harmonica",
+			"layout": {
+				"1": [
+					{
+						"dir": "out",
+						"note": "G,"
+					},
+					{
+						"dir": "in",
+						"note": "=G,",
+						"bend": 1
+					},
+					{
+						"dir": "in",
+						"note": "A,"
+					}
+				],
+				"2": [
+					{
+						"dir": "out",
+						"note": "B,"
+					},
+					{
+						"dir": "in",
+						"note": "C",
+						"bend": 2
+					},
+					{
+						"dir": "in",
+						"note": "=C",
+						"bend": 1
+					},
+					{
+						"dir": "in",
+						"note": "D"
+					}
+				],
+				"3": [
+					{
+						"dir": "out",
+						"note": "D"
+					},
+					{
+						"dir": "in",
+						"note": "=D",
+						"bend": 3
+					},
+					{
+						"dir": "in",
+						"note": "E",
+						"bend": 2
+					},
+					{
+						"dir": "in",
+						"note": "F",
+						"bend": 1
+					},
+					{
+						"dir": "in",
+						"note": "=F"
+					}
+				],
+				"4": [
+					{
+						"dir": "out",
+						"note": "G"
+					},
+					{
+						"dir": "in",
+						"note": "=G",
+						"bend": 1
+					},
+					{
+						"dir": "in",
+						"note": "A"
+					}
+				],
+				"5": [
+					{
+						"dir": "out",
+						"note": "B"
+					},
+					{
+						"dir": "in",
+						"note": "c"
+					}
+				],
+				"6": [
+					{
+						"dir": "out",
+						"note": "d"
+					},
+					{
+						"dir": "in",
+						"note": "=d",
+						"bend": 1
+					},
+					{
+						"dir": "in",
+						"note": "e"
+					}
+				],
+				"7": [
+					{
+						"dir": "out",
+						"note": "g"
+					},
+					{
+						"dir": "in",
+						"note": "=f"
+					}
+				],
+				"8": [
+					{
+						"dir": "out",
+						"note": "b"
+					},
+					{
+						"dir": "out",
+						"note": "=a",
+						"bend": 1
+					},
+					{
+						"dir": "in",
+						"note": "a"
+					}
+				],
+				"9": [
+					{
+						"dir": "out",
+						"note": "d'"
+					},
+					{
+						"dir": "out",
+						"note": "=c'",
+						"bend": 1
+					},
+					{
+						"dir": "in",
+						"note": "c'"
+					}
+				],
+				"10": [
+					{
+						"dir": "out",
+						"note": "g'"
+					},
+					{
+						"dir": "out",
+						"note": "=f'",
+						"bend": 1
+					},
+					{
+						"dir": "out",
+						"note": "f'",
+						"bend": 2
+					},
+					{
+						"dir": "in",
+						"note": "e'"
+					}
+				]
+			}
+		}
+	}
+}

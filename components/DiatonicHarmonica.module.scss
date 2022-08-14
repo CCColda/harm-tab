@@ -1,0 +1,146 @@
+@media (prefers-color-scheme: dark) {
+	.harmonica {
+		--harmonica-background: black;
+		--harmonica-border: white;
+		--harmonica-text: white;
+		--harmonica-out: #d30000;
+		--harmonica-in: #1818d4;
+		--harmonica-out-text: white;
+		--harmonica-in-text: white;
+		--harmonica-button-background: black;
+		--harmonica-button-hover-background: gray;
+		--harmonica-button-text: white;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.harmonica {
+		--harmonica-background: #444;
+		--harmonica-border: black;
+		--harmonica-text: white;
+		--harmonica-out: #d30000;
+		--harmonica-in: #1818d4;
+		--harmonica-out-text: white;
+		--harmonica-in-text: white;
+		--harmonica-button-background: black;
+		--harmonica-button-hover-background: gray;
+		--harmonica-button-text: white;
+	}
+}
+
+.harmonica {
+	position: relative;
+
+	padding: 1rem 0;
+
+	.body {
+		padding: .5rem;
+		border-radius: 10px;
+
+		background: var(--harmonica-background);
+
+		border: 5px solid var(--harmonica-border);
+
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
+
+		.hole {
+			display: inline-flex;
+			flex-direction: column;
+			justify-content: center;
+
+			.note {
+				color: var(--harmonica-text);
+				vertical-align: middle;
+				text-align: center;
+				margin: 0;
+			}
+
+			.buttonarea {
+				display: flex;
+				flex-direction: column;
+				position: relative;
+
+				>button {
+					border: none;
+					padding: none;
+					width: 2rem;
+					height: 1rem;
+				}
+
+				>button:active+.bendpanel,
+				>button:focus+.bendpanel,
+				>button:hover+.bendpanel,
+				.bendpanel:hover {
+					position: absolute;
+					display: flex;
+					flex-direction: column;
+				}
+			}
+
+			span.buttonarea:nth-of-type(1) {
+				>button {
+					background: var(--harmonica-out);
+					color: var(--harmonica-in-text);
+					border-radius: 1rem 1rem 0 0;
+				}
+
+				>.bendpanel {
+					border: 1px solid var(--harmonica-out);
+					bottom: 0;
+				}
+			}
+
+			span.buttonarea:nth-of-type(2) {
+				>button {
+					background: var(--harmonica-in);
+					color: var(--harmonica-in-text);
+					border-radius: 0 0 1rem 1rem;
+				}
+
+				>.bendpanel {
+					border: 1px solid var(--harmonica-in);
+					top: 0;
+				}
+			}
+
+			.bendpanel {
+				display: none;
+				position: absolute;
+				left: 0;
+				right: 0;
+
+				>button {
+					color: var(--harmonica-button-text);
+					background: var(--harmonica-button-background);
+					border: 0;
+					transition: 0.2s background;
+
+					&:hover,
+					&:active {
+						background: var(--harmonica-button-hover-background);
+					}
+				}
+			}
+		}
+	}
+
+	&::before {
+		content: '';
+		position: absolute;
+
+		top: 0;
+		left: 5%;
+		bottom: 0;
+		right: 5%;
+
+		z-index: -1;
+
+		background: var(--harmonica-background);
+		border: 5px solid var(--harmonica-border);
+		border-radius: 10px;
+	}
+}

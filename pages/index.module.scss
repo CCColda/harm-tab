@@ -1,0 +1,46 @@
+.harmonicapanel {
+	position: absolute;
+	display: flex;
+
+	bottom: 20%;
+	min-width: 80%;
+	left: 50%;
+	transform: translateX(-50%);
+
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+
+	.panel {
+		display: flex;
+		flex-direction: column;
+
+		justify-content: center;
+
+		background: #555;
+
+		border-radius: 10px;
+		padding: 1rem;
+
+		gap: .25rem;
+
+		label>input {
+			display: none;
+
+			+span {
+				transition: 0.2s background;
+			}
+
+			&:checked+span {
+				background: #777;
+			}
+
+			&:hover+span {
+				background: #666;
+			}
+		}
+
+	}
+
+}
