@@ -1,4 +1,3 @@
-import { prependOnceListener } from "process";
 import React, { createContext, FC, PropsWithChildren, useEffect, useState } from "react";
 import { HarmLayouts, LoadHarmonicaLayouts } from "../data/Harmonica";
 
@@ -11,7 +10,7 @@ export type DataContextData = {
 		key: string,
 		title: string,
 		notes: string[],
-		lengths: string[],
+		durations: string[],
 		text: string[],
 	},
 };
@@ -34,7 +33,7 @@ const DEFAULT_DATA: DataContextData = {
 		key: "C",
 		title: "",
 		notes: [],
-		lengths: [],
+		durations: [],
 		text: []
 	},
 };
@@ -43,7 +42,8 @@ export const DataContext = createContext<DataContextValue>({
 	data: DEFAULT_DATA,
 	fn: {
 		addNote: () => false,
-		getABC: () => ""
+		getABC: () => "",
+		popNote: () => false
 	},
 });
 
@@ -55,24 +55,24 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string }>> 
 			.then(d => d.status == 200 ? d.text() : "")
 			.then(t => {
 				if (t)
-					setData({
-						...data,
+					setData(oldData => ({
+						...oldData,
 						ready: true,
 						layouts: LoadHarmonicaLayouts(t),
-					});
+					}));
 			});
 	}, [props.layoutPath]);
 
 	const providedValue: DataContextValue = {
 		data,
 		fn: {
-			addNote: (ABCnote, description, length) => {
+			addNote: (ABCnote, description, duration) => {
 				setData({
 					...data,
 					sheet: {
 						...data.sheet,
 						notes: [...data.sheet.notes, ABCnote],
-						lengths: [...data.sheet.lengths, length],
+						durations: [...data.sheet.durations, duration],
 						text: [...data.sheet.text, description]
 					}
 				});
@@ -81,10 +81,11 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string }>> 
 			},
 			getABC: () => [
 				`X:1`,
+				`L:1/64`,
 				`T:${data.sheet.title}`,
 				`M:${data.sheet.meter}`,
 				`K:${data.sheet.key}`,
-				`${data.sheet.notes.map((v, i) => v + data.sheet.lengths[i]).join(" ")}`,
+				`${data.sheet.notes.map((v, i) => v + data.sheet.durations[i]).join(" ")}`,
 				`w:${data.sheet.text.join(" ")}`
 			].join("\n"),
 			popNote: () => {
@@ -97,7 +98,7 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string }>> 
 						...data.sheet,
 						notes: data.sheet.notes.slice(0, -1),
 						text: data.sheet.text.slice(0, -1),
-						lengths: data.sheet.lengths.slice(0, -1),
+						durations: data.sheet.durations.slice(0, -1),
 					}
 				});
 

@@ -42,5 +42,24 @@
 		}
 
 	}
-
 }
+
+/* @media (max-width: 768px) {
+	.harmonicapanel {
+		flex-wrap: wrap;
+
+		.diatonicHarmonica {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 5%;
+
+			overflow-x: scroll;
+			overflow-y: hidden;
+		}
+
+		.panel {
+			display: none;
+		}
+	}
+} */

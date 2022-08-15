@@ -1,24 +1,34 @@
 import Head from 'next/head'
+
 import { FC, useContext, useState } from 'react';
 import { DataContext, DataContextProvider } from '../components/DataContext';
 import { DiatonicHarmonica } from '../components/DiatonicHarmonica';
 import MusicSheet from '../components/MusicSheet'
 import { FormatBend, FormatHole } from '../data/DiatonicHarmonica';
-import { FormatABCNote } from '../data/MusicNote';
+import { ABCNoteToToneNote } from '../data/MusicNote';
 import styles from './index.module.scss'
+import { ToneContext, ToneProvider } from '../components/ToneContext';
+import { Play } from '../data/MusicPlayer';
 
 const Editor: FC<{}> = (props) => {
   const dataContext = useContext(DataContext);
-  const [noteLength, setNoteLength] = useState("1");
+  const Tone = useContext(ToneContext);
+
+  const [noteLength, setNoteLength] = useState("8");
 
   return <>
-    <p>{dataContext.fn.getABC()}</p>
     <MusicSheet abc={dataContext.fn.getABC()} />
     <div className={styles.harmonicapanel}>
-      <DiatonicHarmonica
-        layout={(dataContext.data.layouts[0] as any)?.layout}
-        onClick={(x) => dataContext.fn.addNote(x.note, FormatBend(x.dir, x.bend) + FormatHole(x.dir, x.position), noteLength)}
-      />
+      <div className={styles.panel}>
+        <button onClick={_ => { Play(Tone, dataContext.data.sheet.notes, dataContext.data.sheet.durations) }}>▶ play</button>
+        <button onClick={_ => { throw new Error("TODO!"); }}>■ stop</button>
+      </div>
+      <span className={styles.diatonicHarmonica}>
+        <DiatonicHarmonica
+          layout={(dataContext.data.layouts[0] as any)?.layout}
+          onSelectSound={x => dataContext.fn.addNote(x.note, FormatBend(x.dir, x.bend) + FormatHole(x.dir, x.position), noteLength)}
+        />
+      </span>
       <div
         className={`${styles.panel}`}
       >
@@ -31,36 +41,44 @@ const Editor: FC<{}> = (props) => {
         onChange={ev => setNoteLength((ev.target as HTMLInputElement).value)}
       >
         <label>
-          <input type="radio" name="notelength" value="1/16" />
-          <span>𝅘𝅥𝅲 1/128</span>
-        </label>
-        <label>
-          <input type="radio" name="notelength" value="1/8" />
+          <input type="radio" name="notelength" value="1" />
           <span>𝅘𝅥𝅱 1/64</span>
         </label>
         <label>
-          <input type="radio" name="notelength" value="1/4" />
+          <input type="radio" name="notelength" value="2" />
           <span>𝅘𝅥𝅰 1/32</span>
         </label>
         <label>
-          <input type="radio" name="notelength" value="1/2" />
+          <input type="radio" name="notelength" value="4" />
           <span>𝅘𝅥𝅯 1/16</span>
         </label>
         <label>
-          <input type="radio" name="notelength" value="1" defaultChecked />
+          <input type="radio" name="notelength" value="8" defaultChecked />
           <span>𝅘𝅥𝅮 1/8</span>
         </label>
         <label>
-          <input type="radio" name="notelength" value="2" />
+          <input type="radio" name="notelength" value="16" />
           <span>𝅘𝅥 1/4</span>
         </label>
         <label>
-          <input type="radio" name="notelength" value="4" />
+          <input type="radio" name="notelength" value="24" />
+          <span>𝅘𝅥. 3/8</span>
+        </label>
+        <label>
+          <input type="radio" name="notelength" value="32" />
           <span>𝅗𝅥 1/2</span>
         </label>
         <label>
-          <input type="radio" name="notelength" value="8" />
+          <input type="radio" name="notelength" value="48" />
+          <span>𝅗𝅥. 3/4</span>
+        </label>
+        <label>
+          <input type="radio" name="notelength" value="64" />
           <span>𝅝 1/1</span>
+        </label>
+        <label>
+          <input type="radio" name="notelength" value="96" />
+          <span>𝅝. 3/2</span>
         </label>
       </div>
     </div>
@@ -69,16 +87,18 @@ const Editor: FC<{}> = (props) => {
 
 export default function Home() {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Harm-tab</title>
-      </Head>
+    <ToneProvider fallback={"loading..."}>
+      <DataContextProvider layoutPath='layouts.json'>
+        <div className={styles.container}>
+          <Head>
+            <title>Harm-tab</title>
+          </Head>
 
-      <main>
-        <DataContextProvider layoutPath='layouts.json'>
-          <Editor />
-        </DataContextProvider>
-      </main>
-    </div>
+          <main>
+            <Editor />
+          </main>
+        </div>
+      </DataContextProvider>
+    </ToneProvider>
   )
 }
