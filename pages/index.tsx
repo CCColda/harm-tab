@@ -5,10 +5,14 @@ import { DataContext, DataContextProvider } from '../components/DataContext';
 import { DiatonicHarmonica } from '../components/DiatonicHarmonica';
 import MusicSheet from '../components/MusicSheet'
 import { FormatBend, FormatHole } from '../data/DiatonicHarmonica';
-import { ABCNoteToToneNote } from '../data/MusicNote';
-import styles from './index.module.scss'
 import { ToneContext, ToneProvider } from '../components/ToneContext';
 import { Play } from '../data/MusicPlayer';
+import { MusicControl } from '../components/MusicControl';
+
+import styles from './index.module.scss'
+import { ThreeDotMenu } from '../components/ThreeDotMenu';
+import { renderAbc } from 'abcjs';
+import { AbcVisualParams } from 'abcjs';
 
 const Editor: FC<{}> = (props) => {
   const dataContext = useContext(DataContext);
@@ -16,19 +20,18 @@ const Editor: FC<{}> = (props) => {
 
   const [noteLength, setNoteLength] = useState("8");
 
-  return <>
-    <MusicSheet abc={dataContext.fn.getABC()} />
+  console.log(dataContext.fn.getABC());
+
+  return <div className={styles.editor}>
+  <header>
+    <MusicControl onPlay={_ => Play(Tone, dataContext.data.sheet.notes, dataContext.data.sheet.durations)}/>
+    <ThreeDotMenu />
+  </header>
+  <main>
+    <MusicSheet abc={dataContext.fn.getABC(16)} options={{initialClef: true}}/>
+  </main>
+  <footer>
     <div className={styles.harmonicapanel}>
-      <div className={styles.panel}>
-        <button onClick={_ => { Play(Tone, dataContext.data.sheet.notes, dataContext.data.sheet.durations) }}>▶ play</button>
-        <button onClick={_ => { throw new Error("TODO!"); }}>■ stop</button>
-      </div>
-      <span className={styles.diatonicHarmonica}>
-        <DiatonicHarmonica
-          layout={(dataContext.data.layouts[0] as any)?.layout}
-          onSelectSound={x => dataContext.fn.addNote(x.note, FormatBend(x.dir, x.bend) + FormatHole(x.dir, x.position), noteLength)}
-        />
-      </span>
       <div
         className={`${styles.panel}`}
       >
@@ -81,23 +84,28 @@ const Editor: FC<{}> = (props) => {
           <span>𝅝. 3/2</span>
         </label>
       </div>
+      <span className={styles.diatonicHarmonica}>
+        <DiatonicHarmonica
+          layout={(dataContext.data.layouts[0] as any)?.layout}
+          onSelectSound={x => dataContext.fn.addNote(x.note, FormatBend(x.dir, x.bend) + FormatHole(x.dir, x.position), noteLength)}
+        />
+      </span>
     </div>
-  </>
+  </footer>
+  </div>
 };
+
+renderAbc
 
 export default function Home() {
   return (
     <ToneProvider fallback={"loading..."}>
       <DataContextProvider layoutPath='layouts.json'>
-        <div className={styles.container}>
           <Head>
             <title>Harm-tab</title>
           </Head>
 
-          <main>
-            <Editor />
-          </main>
-        </div>
+          <Editor />
       </DataContextProvider>
     </ToneProvider>
   )

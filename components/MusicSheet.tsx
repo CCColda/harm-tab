@@ -1,9 +1,10 @@
 import { renderAbc } from "abcjs";
+import { AbcVisualParams } from "abcjs";
 import { FC, useEffect, useRef, useState } from "react";
 
 export type MusicSheetProps = {
 	abc: string,
-	options?: object
+	options?: AbcVisualParams
 }
 
 const MusicSheet: FC<MusicSheetProps> = (props) => {

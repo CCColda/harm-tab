@@ -19,7 +19,7 @@ export type DataContextValue = {
 	data: DataContextData,
 
 	fn: {
-		getABC: () => string,
+		getABC: (n?: number) => string,
 		addNote: (ABCnote: string, description: string, length: string) => boolean,
 		popNote: () => boolean,
 	}
@@ -37,6 +37,15 @@ const DEFAULT_DATA: DataContextData = {
 		text: []
 	},
 };
+
+function groupArray<T = any>(arr: T[], n: number): T[][] {
+	let result: T[][] = [];
+
+	for (let i = 0; i < arr.length; i += n)
+		result.push(arr.slice(i, Math.min(i + n, arr.length)));
+
+	return result;
+}
 
 export const DataContext = createContext<DataContextValue>({
 	data: DEFAULT_DATA,
@@ -79,15 +88,24 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string }>> 
 
 				return true;
 			},
-			getABC: () => [
-				`X:1`,
-				`L:1/64`,
-				`T:${data.sheet.title}`,
-				`M:${data.sheet.meter}`,
-				`K:${data.sheet.key}`,
-				`${data.sheet.notes.map((v, i) => v + data.sheet.durations[i]).join(" ")}`,
-				`w:${data.sheet.text.join(" ")}`
-			].join("\n"),
+			getABC: (n: number = 8) => {
+				const compiledNotes = data.sheet.notes.map((v, i) => v + data.sheet.durations[i]);
+				const groupedNotes = groupArray(compiledNotes, n);
+				const groupedText = groupArray(data.sheet.text, n);
+
+				const compiledSheet = groupedNotes.map((v, i) => {
+					return v.join(" ") + "\nw: " + groupedText[i].join(" ")
+				}).join("\n");
+
+				return [
+					`X:1`,
+					`T:${data.sheet.title}`,
+					`M:${data.sheet.meter}`,
+					`L:1/64`,
+					`K:${data.sheet.key}`,
+					`${compiledSheet}`
+				].join("\n")
+			},
 			popNote: () => {
 				if (data.sheet.notes.length == 0)
 					return false;

@@ -1,3 +1,5 @@
+$phone-screen: 768px;
+
 @media (prefers-color-scheme: dark) {
 	.harmonica {
 		--harmonica-background: black;
@@ -13,19 +15,17 @@
 	}
 }
 
-@media (prefers-color-scheme: dark) {
-	.harmonica {
-		--harmonica-background: #444;
-		--harmonica-border: black;
-		--harmonica-text: white;
-		--harmonica-out: #d30000;
-		--harmonica-in: #1818d4;
-		--harmonica-out-text: white;
-		--harmonica-in-text: white;
-		--harmonica-button-background: black;
-		--harmonica-button-hover-background: gray;
-		--harmonica-button-text: white;
-	}
+.harmonica {
+	--harmonica-background: #444;
+	--harmonica-border: black;
+	--harmonica-text: white;
+	--harmonica-out: #d30000;
+	--harmonica-in: #1818d4;
+	--harmonica-out-text: white;
+	--harmonica-in-text: white;
+	--harmonica-button-background: black;
+	--harmonica-button-hover-background: gray;
+	--harmonica-button-text: white;
 }
 
 .harmonica {
@@ -34,6 +34,13 @@
 	padding: 1rem 0;
 
 	.body {
+		display: flex;
+
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		gap: calc(min(1rem, 5vw));
+
 		padding: .5rem;
 		border-radius: 10px;
 
@@ -41,11 +48,10 @@
 
 		border: 5px solid var(--harmonica-border);
 
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
-		gap: 1rem;
+		@media screen and (max-width: $phone-screen) {
+			overflow-x: auto;
+			overflow-y: hidden;
+		}
 
 		.hole {
 			display: inline-flex;
@@ -62,13 +68,12 @@
 			.buttonarea {
 				display: flex;
 				flex-direction: column;
-				position: relative;
 
 				>button {
 					border: none;
 					padding: none;
-					width: 2rem;
-					height: 1rem;
+					width: calc(min(3rem, 20vw));
+					height: calc(min(2rem, 10vw));
 				}
 
 				>button:active+.bendpanel,
@@ -78,6 +83,17 @@
 					position: absolute;
 					display: flex;
 					flex-direction: column;
+
+					@media screen and (max-width: $phone-screen) {
+						flex-direction: row;
+
+						width: fit-content;
+						height: 2rem;
+
+						top: 100%;
+						left: 50%;
+						transform: translate(-50%, -100%);
+					}
 				}
 			}
 
@@ -85,12 +101,14 @@
 				>button {
 					background: var(--harmonica-out);
 					color: var(--harmonica-in-text);
-					border-radius: 1rem 1rem 0 0;
+					border-radius: 50% 50% 0 0;
 				}
 
 				>.bendpanel {
 					border: 1px solid var(--harmonica-out);
-					bottom: 0;
+					@media screen and (min-width: $phone-screen) {
+						bottom: 0;
+					}
 				}
 			}
 
@@ -98,12 +116,14 @@
 				>button {
 					background: var(--harmonica-in);
 					color: var(--harmonica-in-text);
-					border-radius: 0 0 1rem 1rem;
+					border-radius: 0 0 50% 50%;
 				}
 
 				>.bendpanel {
 					border: 1px solid var(--harmonica-in);
-					top: 0;
+					@media screen and (min-width: $phone-screen) {
+						top: 0;
+					}
 				}
 			}
 
@@ -144,3 +164,44 @@
 		border-radius: 10px;
 	}
 }
+
+/* @media screen and (max-width: 768px) {
+	.harmonica {
+		.body {
+			gap: 0.5rem;
+
+			.hole {
+				.buttonarea {
+					>button {
+						width: 3rem;
+						height: 2rem;
+
+						border-radius: 2rem;
+					}
+
+					>button:active,
+					>button:focus {
+						border: 4px double white;
+					}
+
+					>button:active+.bendpanel,
+					>button:focus+.bendpanel,
+					>button:hover+.bendpanel,
+					.bendpanel:hover {
+						flex-direction: row;
+						
+						position: absolute;
+						top: 100%;
+						left: 50%;
+						transform: translate(-50%, -100%);
+
+						width: fit-content;
+
+						height: 2rem;
+					}
+				}
+			}
+		}
+
+	}
+} */

@@ -1,0 +1,96 @@
+$transition-speed: 0.3s;
+$squish-rate: 75%;
+$lift-rate: 0.3rem;
+
+.musicControl {
+    --musicbutton-foreground: white;
+    --musicbutton-hover: #AAA;
+    --musicbutton-active: rgb(0, 201, 0);
+
+    .hiddenRadio {
+        display: inline-block;
+
+        input {
+            display: none;
+        }
+    }
+
+    .styledRadio {
+        >span {
+            display: block;
+            
+            border: 0;
+            padding: .5rem;
+            background: transparent;
+    
+            border-bottom: 0.25rem solid var(--musicbutton-foreground);
+            
+            transition: $transition-speed margin-bottom, $transition-speed padding-bottom;
+        }
+
+        &:hover {
+            >span {
+                margin-bottom: $lift-rate;
+                padding-bottom: .5rem - $lift-rate;
+    
+                border-bottom-color: var(--musicbutton-hover);
+            }
+        }
+
+        &>input:checked+span {
+            border-bottom-color: var(--musicbutton-active);
+        }
+    }
+
+    .play {
+        @extend .hiddenRadio;
+        @extend .styledRadio;
+
+        >span::before {
+            content: '';
+            display: inline-block;
+            width: 0px;
+            height: 0px;
+            
+            transform: scaleY($squish-rate) translateX(-25%) rotate(45deg);
+            
+            border: .75rem solid transparent;
+            border-top-color: var(--musicbutton-foreground);
+            border-right-color: var(--musicbutton-foreground);
+        
+            transition: $transition-speed border-top-color, $transition-speed border-right-color;
+        }
+
+        &:hover>span::before {
+            border-top-color: var(--musicbutton-hover);
+            border-right-color: var(--musicbutton-hover);
+        }
+
+        &>input:checked+span::before {
+            border-top-color: var(--musicbutton-active);
+            border-right-color: var(--musicbutton-active);
+        }
+    }
+
+    .stop {
+        @extend .hiddenRadio;
+        @extend .styledRadio;
+
+        >span::before {
+            content: '';
+            display: inline-block;
+            border: 0.75rem solid var(--musicbutton-foreground);
+            transform: scale($squish-rate);
+
+            transition: $transition-speed border-color;
+        }
+
+        &:hover>span::before {
+            border-color: var(--musicbutton-hover);
+        }
+
+        >input:checked+span::before {
+            border-color: var(--musicbutton-active);
+        }
+    }
+}
