@@ -1,0 +1,30 @@
+$button-border-radius: 10px;
+
+.musicalElements {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+
+	button {
+		width: 2rem;
+		height: 2rem;
+
+		font-size: larger;
+		vertical-align: middle;
+
+		border: none;
+
+		&:first-of-type {
+			border-radius: $button-border-radius 0 0 $button-border-radius;
+		}
+
+		&:last-of-type {
+			border-radius: 0 $button-border-radius $button-border-radius 0;
+		}
+
+		&:hover {
+			border: 1px solid white;
+		}
+	}
+}

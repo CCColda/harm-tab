@@ -97,6 +97,10 @@ $phone-screen: 768px;
 				}
 			}
 
+			.bendpanel:empty {
+				display: none !important;
+			}
+
 			span.buttonarea:nth-of-type(1) {
 				>button {
 					background: var(--harmonica-out);
@@ -106,6 +110,7 @@ $phone-screen: 768px;
 
 				>.bendpanel {
 					border: 1px solid var(--harmonica-out);
+
 					@media screen and (min-width: $phone-screen) {
 						bottom: 0;
 					}
@@ -121,6 +126,7 @@ $phone-screen: 768px;
 
 				>.bendpanel {
 					border: 1px solid var(--harmonica-in);
+
 					@media screen and (min-width: $phone-screen) {
 						top: 0;
 					}

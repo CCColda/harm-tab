@@ -25,7 +25,7 @@ $phone-screen: 768px;
 		flex-direction: row;
 
 		align-items: center;
-		justify-content: start;
+		justify-content: flex-start;
 
 		gap: 0.5rem;
 
@@ -35,120 +35,16 @@ $phone-screen: 768px;
 	}
 
 	main {
-		overflow-x: auto; 
+		overflow-x: auto;
 		overflow-y: auto;
 		scroll-behavior: smooth;
 	}
 
 	footer {
 		width: fit-content;
+		max-width: 100%;
+
+		margin-left: auto;
+		margin-right: auto;
 	}
 }
-
-/* 
-@media (prefers-color-scheme: dark) {
-	.harmonicapanel {
-		--button-foreground: white;
-		--button-hover-background: gray;
-		--button-active-background: #AAA;
-	}
-}
-
-.harmonicapanel {
-	--button-foreground: white;
-	--button-hover-background: gray;
-	--button-active-background: #AAA;
-	--panel-background: #666;
-}
-
-.harmonicapanel {
-	position: absolute;
-	display: flex;
-
-	flex-direction: row;
-	justify-content: center;
-	gap: 1rem;
-
-	bottom: 0;
-	left: 0;
-	right: 0;
-
-	@media screen and (max-width: $phone-screen) {
-		flex-direction: column;
-		
-		justify-content: flex-end;
-	}
-
-	.panel {
-		display: flex;
-		flex-direction: column;
-
-		justify-content: center;
-
-		background: var(--panel-background);
-
-		border-radius: 1rem;
-		padding: 1rem;
-
-		gap: .25rem;
-
-		@media screen and (max-width: $phone-screen) {
-			flex-direction: row;
-			flex-wrap: wrap;
-			justify-content: space-between;
-		}
-
-		button {
-			border: 0;
-			background: none;
-			height: 100%;
-
-			color: var(--button-foreground);
-
-			&:hover {
-				background: var(--button-hover-background);
-			}
-
-			&:active {
-				background: var(--button-active-background);
-			}
-		}
-
-		label>input {
-			display: none;
-
-			+span {
-				color: var(--button-foreground);
-				transition: 0.2s background;
-			}
-
-			&:checked+span {
-				background: var(--button-active-background);
-			}
-
-			&:hover+span {
-				background: var(--button-hover-background);
-			}
-		}
-
-	}
-}
-
-/* 
-@media (max-width: 768px) {
-	.harmonicapanel {
-		transform: none;
-		left: 0;
-		right: 0;
-		bottom: 0;
-
-		.diatonicHarmonica {
-			position: absolute;
-			left: 0;
-			right: 0;
-			bottom: 4rem;
-		}
-
-		
-	}
-} */
