@@ -1,0 +1,41 @@
+$transition-speed: 0.2s;
+
+.notelengths {
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+	justify-content: space-between;
+
+	overflow-x: auto;
+	overflow-y: none;
+
+	background: var(--panel-background);
+	color: var(--panel-foreground);
+
+	border-radius: 1rem;
+
+	input {
+		display: none;
+	}
+
+	label {
+		>div {
+			padding: 0.5rem;
+			transition: $transition-speed background-color;
+
+			>span {
+				vertical-align: middle;
+
+				&:first-of-type {
+					font-size: 2rem;
+					margin-right: 0.2rem;
+				}
+			}
+		}
+	}
+
+	input:checked+div,
+	div:hover {
+		background: var(--panel-selected);
+	}
+}

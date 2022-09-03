@@ -3,28 +3,27 @@ $button-border-radius: 10px;
 .musicalElements {
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: baseline;
 	justify-content: center;
 
-	button {
-		width: 2rem;
-		height: 2rem;
+	background: var(--panel-background);
+	color: var(--panel-foreground);
 
-		font-size: larger;
+	border-radius: 1rem;
+
+	button {
+		padding: 0.5rem;
+
+		font-size: 2rem;
 		vertical-align: middle;
 
 		border: none;
 
-		&:first-of-type {
-			border-radius: $button-border-radius 0 0 $button-border-radius;
-		}
+		background: none;
 
-		&:last-of-type {
-			border-radius: 0 $button-border-radius $button-border-radius 0;
-		}
-
+		&:active,
 		&:hover {
-			border: 1px solid white;
+			background: var(--panel-selected);
 		}
 	}
 }

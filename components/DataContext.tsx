@@ -4,6 +4,7 @@ import { HarmLayouts, LoadHarmonicaLayouts } from "../data/Harmonica";
 export type DataContextData = {
 	ready: boolean,
 	layouts: HarmLayouts,
+	noteLength: string,
 
 	sheet: {
 		meter: string,
@@ -22,12 +23,14 @@ export type DataContextValue = {
 		getABC: (n?: number) => string,
 		addNote: (ABCnote: string, description: string, length: string) => boolean,
 		popNote: () => boolean,
+		setNoteLength: (newLength: string) => void
 	}
 };
 
 const DEFAULT_DATA: DataContextData = {
 	ready: false,
 	layouts: [],
+	noteLength: "8",
 	sheet: {
 		meter: "4/4",
 		key: "C",
@@ -52,7 +55,8 @@ export const DataContext = createContext<DataContextValue>({
 	fn: {
 		addNote: () => false,
 		getABC: () => "",
-		popNote: () => false
+		popNote: () => false,
+		setNoteLength: () => { }
 	},
 });
 
@@ -121,7 +125,8 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string }>> 
 				});
 
 				return true;
-			}
+			},
+			setNoteLength: newNoteLength => setData({ ...data, noteLength: newNoteLength })
 		}
 	}
 

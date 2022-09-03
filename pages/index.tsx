@@ -14,6 +14,7 @@ import { ThreeDotMenu } from '../components/ThreeDotMenu';
 import { renderAbc } from 'abcjs';
 import { AbcVisualParams } from 'abcjs';
 import { MusicalElements } from '../components/MusicalElements';
+import { NoteLengths } from '../components/NoteLengths';
 
 const Editor: FC<{}> = (props) => {
   const dataContext = useContext(DataContext);
@@ -33,58 +34,14 @@ const Editor: FC<{}> = (props) => {
     </main>
     <footer>
       <div className={styles.harmonicapanel}>
-        <MusicalElements />
-        <div
-          className={`${styles.panel}`}
-          onChange={ev => setNoteLength((ev.target as HTMLInputElement).value)}
-        >
-          <label>
-            <input type="radio" name="notelength" value="1" />
-            <span>𝅘𝅥𝅱 1/64</span>
-          </label>
-          <label>
-            <input type="radio" name="notelength" value="2" />
-            <span>𝅘𝅥𝅰 1/32</span>
-          </label>
-          <label>
-            <input type="radio" name="notelength" value="4" />
-            <span>𝅘𝅥𝅯 1/16</span>
-          </label>
-          <label>
-            <input type="radio" name="notelength" value="8" defaultChecked />
-            <span>𝅘𝅥𝅮 1/8</span>
-          </label>
-          <label>
-            <input type="radio" name="notelength" value="16" />
-            <span>𝅘𝅥 1/4</span>
-          </label>
-          <label>
-            <input type="radio" name="notelength" value="24" />
-            <span>𝅘𝅥. 3/8</span>
-          </label>
-          <label>
-            <input type="radio" name="notelength" value="32" />
-            <span>𝅗𝅥 1/2</span>
-          </label>
-          <label>
-            <input type="radio" name="notelength" value="48" />
-            <span>𝅗𝅥. 3/4</span>
-          </label>
-          <label>
-            <input type="radio" name="notelength" value="64" />
-            <span>𝅝 1/1</span>
-          </label>
-          <label>
-            <input type="radio" name="notelength" value="96" />
-            <span>𝅝. 3/2</span>
-          </label>
-        </div>
-        <span className={styles.diatonicHarmonica}>
-          <DiatonicHarmonica
-            layout={(dataContext.data.layouts[0] as any)?.layout}
-            onSelectSound={x => dataContext.fn.addNote(x.note, FormatBend(x.dir, x.bend) + FormatHole(x.dir, x.position), noteLength)}
-          />
+        <span className={styles.music}>
+          <MusicalElements />
+          <NoteLengths />
         </span>
+        <DiatonicHarmonica
+          layout={(dataContext.data.layouts[0] as any)?.layout}
+          onSelectSound={x => dataContext.fn.addNote(x.note, FormatBend(x.dir, x.bend) + FormatHole(x.dir, x.position), noteLength)}
+        />
       </div>
     </footer>
   </div>

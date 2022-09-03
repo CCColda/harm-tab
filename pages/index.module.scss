@@ -2,6 +2,10 @@ $phone-screen: 768px;
 
 .editor {
 	--header-background: black;
+
+	--panel-background: black;
+	--panel-foreground: white;
+	--panel-selected: #333;
 }
 
 .editor {
@@ -46,5 +50,11 @@ $phone-screen: 768px;
 
 		margin-left: auto;
 		margin-right: auto;
+
+		.music {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
 	}
 }
