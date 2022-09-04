@@ -18,25 +18,24 @@ $toggle-margin: 1rem;
 	background: var(--panel-background);
 	color: var(--panel-foreground);
 
-	>label {
-		@extend .cap-max-width;
 
-		>input {
-			display: none;
+	>input {
+		display: none;
+	}
+
+	>input:checked+.panel {
+		>.toggle {
+			transform: translateX(+25%) rotate(225deg);
 		}
 
-		>input:checked+.panel {
-			>.toggle {
-				transform: translateX(+25%) rotate(225deg);
-			}
-
-			>.list {
-				display: flex;
-			}
+		>.list {
+			display: flex;
 		}
 	}
 
 	.panel {
+		@extend .cap-max-width;
+
 		display: flex;
 		flex-direction: row;
 		align-items: center;

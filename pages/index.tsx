@@ -55,16 +55,17 @@ const Editor: FC<{}> = (props) => {
       </div>
     </main>
     <footer>
-      <div className={styles.harmonicapanel}>
-        <span className={styles.music}>
-          <MusicalElements />
-          <NoteLengths />
-        </span>
+      <span className={styles.harmonicaWrapper}>
         <DiatonicHarmonica
           layout={(dataContext.data.layouts[0] as any)?.layout}
           onSelectSound={x => dataContext.fn.addNote(x.note, FormatBend(x.dir, x.bend) + FormatHole(x.dir, x.position), dataContext.data.noteLength)}
         />
-      </div>
+      </span>
+
+      <span className={styles.music}>
+        <NoteLengths />
+        <MusicalElements />
+      </span>
     </footer>
   </div>
 };

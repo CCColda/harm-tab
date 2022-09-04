@@ -1,37 +1,34 @@
 $phone-screen: 768px;
+$button-border-radius: 100%;
+$button-width: calc(min(2.5rem, 20vw));
+$button-height: calc(min(1.5rem, 10vw));
+$transition-speed: 0.4s;
 
-@media (prefers-color-scheme: dark) {
-	.harmonica {
-		--harmonica-background: black;
-		--harmonica-border: white;
-		--harmonica-text: white;
-		--harmonica-out: #d30000;
-		--harmonica-in: #1818d4;
-		--harmonica-out-text: white;
-		--harmonica-in-text: white;
-		--harmonica-button-background: black;
-		--harmonica-button-hover-background: gray;
-		--harmonica-button-text: white;
-	}
-}
+$harmonica-body-padding: calc(min(.5rem, 2vh));
+$harmonica-cover-padding: calc(min(1rem, 3vh));
+$harmonica-border-width: calc(min(5px, 0.5vh));
 
 .harmonica {
-	--harmonica-background: #444;
-	--harmonica-border: black;
+	--harmonica-background: #101010;
+	--harmonica-border: #151515;
 	--harmonica-text: white;
-	--harmonica-out: #d30000;
-	--harmonica-in: #1818d4;
-	--harmonica-out-text: white;
-	--harmonica-in-text: white;
+	--harmonica-out: black;
+	--harmonica-in: black;
+	--harmonica-out-border: red;
+	--harmonica-in-border: blue;
+	--harmonica-out-text: #ff3636;
+	--harmonica-in-text: #2f7bfd;
+	--harmonica-out-active: #540000;
+	--harmonica-in-active: #00225c;
 	--harmonica-button-background: black;
-	--harmonica-button-hover-background: gray;
+	--harmonica-button-hover-background: #3c3c3c;
 	--harmonica-button-text: white;
 }
 
 .harmonica {
 	position: relative;
 
-	padding: 1rem 0;
+	padding: $harmonica-cover-padding 0;
 
 	.body {
 		display: flex;
@@ -41,12 +38,12 @@ $phone-screen: 768px;
 		align-items: center;
 		gap: calc(min(1rem, 5vw));
 
-		padding: .5rem;
+		padding: $harmonica-body-padding;
 		border-radius: 10px;
 
 		background: var(--harmonica-background);
 
-		border: 5px solid var(--harmonica-border);
+		border: $harmonica-border-width solid var(--harmonica-border);
 
 		@media screen and (max-width: $phone-screen) {
 			overflow-x: auto;
@@ -63,6 +60,10 @@ $phone-screen: 768px;
 				vertical-align: middle;
 				text-align: center;
 				margin: 0;
+
+				@media screen and (max-height: 330px) {
+					display: none;
+				}
 			}
 
 			.buttonarea {
@@ -72,8 +73,8 @@ $phone-screen: 768px;
 				>button {
 					border: none;
 					padding: none;
-					width: calc(min(3rem, 20vw));
-					height: calc(min(2rem, 10vw));
+					width: $button-width;
+					height: $button-height;
 				}
 
 				>button:active+.bendpanel,
@@ -95,6 +96,10 @@ $phone-screen: 768px;
 						transform: translate(-50%, -100%);
 					}
 				}
+
+				@media screen and (min-width: $phone-screen) {
+					position: relative;
+				}
 			}
 
 			.bendpanel:empty {
@@ -104,8 +109,19 @@ $phone-screen: 768px;
 			span.buttonarea:nth-of-type(1) {
 				>button {
 					background: var(--harmonica-out);
-					color: var(--harmonica-in-text);
-					border-radius: 50% 50% 0 0;
+					color: var(--harmonica-out-text);
+					border: 1px solid var(--harmonica-out-border);
+					border-radius: $button-border-radius $button-border-radius 0 0;
+
+					border-bottom: none;
+
+					transition: $transition-speed background;
+
+					&:active,
+					&:focus,
+					&:hover {
+						background: var(--harmonica-out-active);
+					}
 				}
 
 				>.bendpanel {
@@ -121,7 +137,18 @@ $phone-screen: 768px;
 				>button {
 					background: var(--harmonica-in);
 					color: var(--harmonica-in-text);
-					border-radius: 0 0 50% 50%;
+					border: 1px solid var(--harmonica-in-border);
+					border-radius: 0 0 $button-border-radius $button-border-radius;
+
+					border-top: none;
+
+					transition: $transition-speed background;
+
+					&:active,
+					&:focus,
+					&:hover {
+						background: var(--harmonica-in-active);
+					}
 				}
 
 				>.bendpanel {
@@ -166,48 +193,7 @@ $phone-screen: 768px;
 		z-index: -1;
 
 		background: var(--harmonica-background);
-		border: 5px solid var(--harmonica-border);
+		border: $harmonica-border-width solid var(--harmonica-border);
 		border-radius: 10px;
 	}
 }
-
-/* @media screen and (max-width: 768px) {
-	.harmonica {
-		.body {
-			gap: 0.5rem;
-
-			.hole {
-				.buttonarea {
-					>button {
-						width: 3rem;
-						height: 2rem;
-
-						border-radius: 2rem;
-					}
-
-					>button:active,
-					>button:focus {
-						border: 4px double white;
-					}
-
-					>button:active+.bendpanel,
-					>button:focus+.bendpanel,
-					>button:hover+.bendpanel,
-					.bendpanel:hover {
-						flex-direction: row;
-						
-						position: absolute;
-						top: 100%;
-						left: 50%;
-						transform: translate(-50%, -100%);
-
-						width: fit-content;
-
-						height: 2rem;
-					}
-				}
-			}
-		}
-
-	}
-} */
