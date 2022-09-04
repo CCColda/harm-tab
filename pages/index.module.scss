@@ -42,6 +42,12 @@ $phone-screen: 768px;
 		overflow-x: auto;
 		overflow-y: auto;
 		scroll-behavior: smooth;
+		width: 100%;
+
+		.sheetWrapper {
+			margin-left: 2rem;
+			margin-right: 2rem;
+		}
 	}
 
 	footer {

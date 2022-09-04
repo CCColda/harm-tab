@@ -22,22 +22,31 @@ const NOTES = Object.freeze([
 const NoteLengths: FC<NoteLengthsProps> = (props) => {
 	const dataContext = useContext(DataContext);
 
-	return <div
-		className={styles.notelengths}
-		onChange={ev => dataContext.fn.setNoteLength((ev.target as HTMLInputElement).value)}
-	>
-		{
-			NOTES.map((v, i) =>
-				<label key={i}>
-					<input type="radio" name="notelength" value={`${v.value}`} defaultChecked={v.default ?? false} />
-					<div>
-						<span>{v.symbol}</span>
-						<span>{v.display}</span>
-					</div>
-				</label>
-			)
-		}
-	</div>
+	return <div className={styles.notelengths}>
+		<label>
+			<input type="checkbox" />
+			<span className={styles.panel}>
+				<span className={styles.icon}>𝅘𝅥</span>
+				<span className={styles.toggle}></span>
+				<div
+					className={styles.list}
+					onChange={ev => dataContext.fn.setNoteLength((ev.target as HTMLInputElement).value)}
+				>
+					{
+						NOTES.map((v, i) =>
+							<label key={i}>
+								<input type="radio" name="notelength" value={`${v.value}`} defaultChecked={v.default ?? false} />
+								<div>
+									<span>{v.symbol}</span>
+									<span>{v.display}</span>
+								</div>
+							</label>
+						)
+					}
+				</div>
+			</span>
+		</label>
+	</div >
 };
 
 export { NoteLengths };

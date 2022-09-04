@@ -1,41 +1,110 @@
 $transition-speed: 0.2s;
+$border-radius: 1rem;
+$toggle-margin: 1rem;
+
+.cap-max-width {
+	max-width: 100%;
+}
 
 .notelengths {
+	@extend .cap-max-width;
+
 	display: flex;
 	flex-direction: row;
-	align-items: baseline;
-	justify-content: space-between;
+	align-items: center;
 
-	overflow-x: auto;
-	overflow-y: none;
+	border-radius: $border-radius;
 
 	background: var(--panel-background);
 	color: var(--panel-foreground);
 
-	border-radius: 1rem;
+	>label {
+		@extend .cap-max-width;
 
-	input {
-		display: none;
-	}
+		>input {
+			display: none;
+		}
 
-	label {
-		>div {
-			padding: 0.5rem;
-			transition: $transition-speed background-color;
+		>input:checked+.panel {
+			>.toggle {
+				transform: translateX(+25%) rotate(225deg);
+			}
 
-			>span {
-				vertical-align: middle;
-
-				&:first-of-type {
-					font-size: 2rem;
-					margin-right: 0.2rem;
-				}
+			>.list {
+				display: flex;
 			}
 		}
 	}
 
-	input:checked+div,
-	div:hover {
-		background: var(--panel-selected);
+	.panel {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.icon {
+		font-size: 2rem;
+		margin-left: $toggle-margin;
+		vertical-align: middle;
+	}
+
+	.toggle {
+		display: block;
+
+		width: 0;
+		height: 0;
+		padding: 0.5rem;
+
+		border: 5px solid transparent;
+		border-right-color: white;
+		border-top-color: white;
+		border-radius: 0.25rem;
+
+		transform: translateX(-25%) rotate(45deg);
+		transition: $transition-speed transform;
+
+		margin-right: $toggle-margin;
+
+		>input {
+			display: none;
+		}
+	}
+
+	.list {
+		display: none;
+
+		flex-direction: row;
+		justify-content: space-between;
+
+		border-radius: $border-radius;
+
+		overflow-x: auto;
+		overflow-y: none;
+
+		input {
+			display: none;
+		}
+
+		label {
+			>div {
+				padding: 0.5rem;
+				transition: $transition-speed background-color;
+
+				>span {
+					vertical-align: middle;
+
+					&:first-of-type {
+						font-size: 2rem;
+						margin-right: 0.2rem;
+					}
+				}
+			}
+		}
+
+		input:checked+div,
+		div:hover {
+			background: var(--panel-selected);
+		}
 	}
 }
