@@ -1,3 +1,5 @@
+@import './DiatonicHarmonica.colors.scss';
+
 $phone-screen: 768px;
 $button-border-radius: 100%;
 $button-width: calc(min(2.5rem, 20vw));
@@ -9,23 +11,8 @@ $harmonica-cover-padding: calc(min(1rem, 3vh));
 $harmonica-border-width: calc(min(5px, 0.5vh));
 
 .harmonica {
-	--harmonica-background: #101010;
-	--harmonica-border: #151515;
-	--harmonica-text: white;
-	--harmonica-out: black;
-	--harmonica-in: black;
-	--harmonica-out-border: red;
-	--harmonica-in-border: blue;
-	--harmonica-out-text: #ff3636;
-	--harmonica-in-text: #2f7bfd;
-	--harmonica-out-active: #540000;
-	--harmonica-in-active: #00225c;
-	--harmonica-button-background: black;
-	--harmonica-button-hover-background: #3c3c3c;
-	--harmonica-button-text: white;
-}
+	@extend .harmonica-colors;
 
-.harmonica {
 	position: relative;
 
 	padding: $harmonica-cover-padding 0;

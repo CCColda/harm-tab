@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react';
 import { DataContext } from './DataContext';
-import styles from './MusicalElements.module.scss';
+
+import styles from '../styles/MusicalElements.module.scss';
 
 const MusicalElements: FC<{}> = (_props) => {
 	const dataContext = useContext(DataContext);

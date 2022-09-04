@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react';
 import { DataContext } from './DataContext';
-import styles from './NoteLengths.module.scss';
+
+import styles from '../styles/NoteLengths.module.scss';
 
 export type NoteLengthsProps = {
 
@@ -24,7 +25,7 @@ const NoteLengths: FC<NoteLengthsProps> = (props) => {
 
 	return <label className={styles.notelengths}>
 		<input type="checkbox" />
-		<span className={styles.panel}>
+		<span className={styles.togglePanel}>
 			<span className={styles.icon}>𝅘𝅥</span>
 			<span className={styles.toggle}></span>
 			<div

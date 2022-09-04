@@ -1,43 +1,59 @@
 import Head from 'next/head'
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useRef, useState } from 'react';
 import { renderAbc } from 'abcjs';
 
-import { DataContext, DataContextProvider } from '../components/DataContext';
-import { DiatonicHarmonica } from '../components/DiatonicHarmonica';
-import MusicSheet from '../components/MusicSheet'
-import { FormatBend, FormatHole } from '../data/DiatonicHarmonica';
-import { ToneContext, ToneProvider } from '../components/ToneContext';
 import { Play } from '../data/MusicPlayer';
-import { MusicControl } from '../components/MusicControl';
+import { FormatBend, FormatHole } from '../data/DiatonicHarmonica';
+import useEventListener from '../data/useEventListener';
 
-import { ThreeDotMenu } from '../components/ThreeDotMenu';
-import { MusicalElements } from '../components/MusicalElements';
-import { NoteLengths } from '../components/NoteLengths';
+import {
+  DataContext, DataContextProvider,
+  DiatonicHarmonica,
+  MusicSheet,
+  ToneContext, ToneProvider,
+  MusicControl,
+  ThreeDotMenu,
+  MusicalElements,
+  NoteLengths
+} from '../components/index';
 
-import styles from './index.module.scss'
+import styles from '../styles/index.module.scss'
 
 const Editor: FC<{}> = (props) => {
   const dataContext = useContext(DataContext);
   const Tone = useContext(ToneContext);
 
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [sheetWidth, setSheetWidth] = useState(0);
   const mainRef = useRef<HTMLDivElement | null>(null);
+  const editorRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (mainRef) {
-      const resizeHandler = _ev =>
-        setSheetWidth(mainRef.current.getBoundingClientRect().width);
+  useEventListener(
+    window,
+    'resize',
+    _ev => mainRef && setSheetWidth(mainRef.current.getBoundingClientRect().width),
+    [mainRef]
+  );
 
-      window.addEventListener('resize', resizeHandler);
+  useEventListener(
+    editorRef.current,
+    'onfullscreenchange',
+    _ev => editorRef && setIsFullscreen(!!document.fullscreenElement),
+    [editorRef]
+  );
 
-      return () => window.removeEventListener('resize', resizeHandler);
-    }
-  }, [mainRef]);
+  const toggleFullscreen = () => {
+    if (isFullscreen)
+      document.exitFullscreen().then(() => setIsFullscreen(false));
+    else
+      editorRef.current?.requestFullscreen({ navigationUI: 'auto' }).then(() => setIsFullscreen(true));
+  };
 
-  console.log(dataContext.fn.getABC());
-
-  return <div className={styles.editor}>
+  return <div ref={editorRef} className={styles.editor}>
     <header>
+      {/* <button onClick={_ => Save("output", JSON.stringify(dataContext.data.sheet))}>save</button>
+      <button onClick={_ => dataContext.fn.setSheet(Load("output") as DataContextData["sheet"])}>load</button> */}
+      <button onClick={toggleFullscreen}>fullscreen</button>
       <MusicControl onPlay={_ => Play(Tone, dataContext.data.sheet.notes, dataContext.data.sheet.durations)} />
       <ThreeDotMenu />
     </header>
@@ -67,10 +83,8 @@ const Editor: FC<{}> = (props) => {
         <MusicalElements />
       </span>
     </footer>
-  </div>
+  </div >
 };
-
-renderAbc
 
 export default function Home() {
   return (

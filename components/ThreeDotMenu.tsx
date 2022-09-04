@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import styles from "./ThreeDotMenu.module.scss";
+import styles from "../styles/ThreeDotMenu.module.scss";
 
 export type ThreeDotMenuProps = {
 

@@ -23,7 +23,8 @@ export type DataContextValue = {
 		getABC: (n?: number) => string,
 		addNote: (ABCnote: string, description: string, length: string) => boolean,
 		popNote: () => boolean,
-		setNoteLength: (newLength: string) => void
+		setNoteLength: (newLength: string) => void,
+		setSheet: (newSheet: DataContextData["sheet"]) => void
 	}
 };
 
@@ -56,7 +57,8 @@ export const DataContext = createContext<DataContextValue>({
 		addNote: () => false,
 		getABC: () => "",
 		popNote: () => false,
-		setNoteLength: () => { }
+		setNoteLength: () => { },
+		setSheet: () => { }
 	},
 });
 
@@ -126,7 +128,8 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string }>> 
 
 				return true;
 			},
-			setNoteLength: newNoteLength => setData({ ...data, noteLength: newNoteLength })
+			setNoteLength: newNoteLength => setData({ ...data, noteLength: newNoteLength }),
+			setSheet: newSheet => setData({ ...data, sheet: newSheet }),
 		}
 	}
 

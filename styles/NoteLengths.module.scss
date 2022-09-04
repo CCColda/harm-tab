@@ -1,5 +1,6 @@
+@import './Panel.scss';
+
 $transition-speed: 0.2s;
-$border-radius: 1rem;
 $toggle-margin: 1rem;
 
 .cap-max-width {
@@ -8,22 +9,13 @@ $toggle-margin: 1rem;
 
 .notelengths {
 	@extend .cap-max-width;
-
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-
-	border-radius: $border-radius;
-
-	background: var(--panel-background);
-	color: var(--panel-foreground);
-
+	@extend .panel;
 
 	>input {
 		display: none;
 	}
 
-	>input:checked+.panel {
+	>input:checked+.togglePanel {
 		>.toggle {
 			transform: translateX(+25%) rotate(225deg);
 		}
@@ -33,7 +25,7 @@ $toggle-margin: 1rem;
 		}
 	}
 
-	.panel {
+	.togglePanel {
 		@extend .cap-max-width;
 
 		display: flex;
@@ -76,7 +68,7 @@ $toggle-margin: 1rem;
 		flex-direction: row;
 		justify-content: space-between;
 
-		border-radius: $border-radius;
+		border-radius: $panel-border-radius;
 
 		overflow-x: auto;
 		overflow-y: none;

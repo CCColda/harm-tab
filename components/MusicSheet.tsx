@@ -22,4 +22,4 @@ const MusicSheet: FC<MusicSheetProps> = (props) => {
 	return <div ref={ref}></div>
 };
 
-export default MusicSheet;
+export { MusicSheet };

@@ -1,5 +1,6 @@
-import styles from "./MusicControl.module.scss";
-import { FC } from "react";
+import { FC, useRef } from "react";
+
+import styles from "../styles/MusicControl.module.scss";
 
 export type MusicControlProps = {
     onPlay?: CallableFunction,
@@ -9,14 +10,16 @@ export type MusicControlProps = {
 const MusicControl: FC<MusicControlProps> = (props) => {
     return <div
         className={styles.musicControl}
-        onChange={e => {switch ((e.currentTarget as HTMLInputElement).value) {
-            case "play":
-                if (props.onPlay) props.onPlay();
-                break;
-            case "stop":
-                if (props.onStop) props.onStop();
-                break;
-        }}}>
+        onChange={e => {
+            switch ((e.target as HTMLInputElement).value) {
+                case "play":
+                    if (props.onPlay) props.onPlay();
+                    break;
+                case "stop":
+                    if (props.onStop) props.onStop();
+                    break;
+            }
+        }}>
         <label className={styles.play}>
             <input type="radio" name="musiccontrol" value="play"></input>
             <span></span>
@@ -25,7 +28,7 @@ const MusicControl: FC<MusicControlProps> = (props) => {
             <input type="radio" name="musiccontrol" value="stop" defaultChecked></input>
             <span></span>
         </label>
-     </div>;
+    </div>;
 }
 
 export { MusicControl };

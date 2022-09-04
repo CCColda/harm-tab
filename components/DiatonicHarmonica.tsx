@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import { DiaHarmBend, DiaHarmLayout, DiaHarmPositions, DiaHarmSound, DiaHarmSoundPos, FormatBendWithNumber } from "../data/DiatonicHarmonica";
 import { FormatABCNote } from "../data/MusicNote";
-import styles from "./DiatonicHarmonica.module.scss"
+
+import styles from "../styles/DiatonicHarmonica.module.scss"
 
 export type DiatonicHarmonicaProps = {
 	layout?: DiaHarmLayout,

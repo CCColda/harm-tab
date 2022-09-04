@@ -1,14 +1,10 @@
+@import './index.colors.scss';
+
 $phone-screen: 768px;
 
 .editor {
-	--header-background: black;
+	@extend .index-colors;
 
-	--panel-background: black;
-	--panel-foreground: white;
-	--panel-selected: #333;
-}
-
-.editor {
 	position: absolute;
 
 	top: 0;
@@ -20,6 +16,8 @@ $phone-screen: 768px;
 	flex-direction: column;
 	flex-wrap: nowrap;
 
+	background: var(--editor-background);
+
 	justify-content: space-between;
 
 	header {
@@ -27,6 +25,8 @@ $phone-screen: 768px;
 
 		display: flex;
 		flex-direction: row;
+
+		border-bottom: 1px solid var(--header-bottom-border);
 
 		align-items: center;
 		justify-content: flex-start;
@@ -47,6 +47,8 @@ $phone-screen: 768px;
 		.sheetWrapper {
 			margin-left: 2rem;
 			margin-right: 2rem;
+
+			color: var(--sheet-color);
 		}
 	}
 

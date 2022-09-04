@@ -1,0 +1,18 @@
+$panel-border-radius: 20px;
+
+.panel {
+
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	border-radius: $panel-border-radius;
+
+	background: var(--panel-background);
+	color: var(--panel-foreground);
+	border: 1px solid var(--panel-border);
+
+	* {
+		color: var(--panel-foreground);
+	}
+}
