@@ -1,23 +1,27 @@
 import Head from 'next/head'
-import { FC, useContext, useRef, useState } from 'react';
-import { renderAbc } from 'abcjs';
-
+import React, { FC, ReactNode, useContext, useRef, useState } from 'react';
 import { Play } from '../data/MusicPlayer';
-import { FormatBend, FormatHole } from '../data/DiatonicHarmonica';
+
 import useEventListener from '../data/useEventListener';
 
 import {
-  DataContext, DataContextProvider,
-  DiatonicHarmonica,
+  DataContext,
+  DataContextProvider,
   MusicSheet,
   ToneContext, ToneProvider,
-  MusicControl,
   ThreeDotMenu,
   MusicalElements,
-  NoteLengths
+  NoteLengths,
+  DiatonicHarmonica,
+  MusicControl
 } from '../components/index';
 
 import styles from '../styles/index.module.scss'
+import { serializeDataContextData } from '../data/Serializer';
+import { abcFromDiatonicSheet, addDiatonicNote } from '../data/Sheet';
+import { Loading } from '../components/Loading';
+import { LayoutChooser } from '../components/LayoutChooser';
+import { DataContext as DCT } from '../types/DataContext';
 
 const Editor: FC<{}> = (props) => {
   const dataContext = useContext(DataContext);
@@ -49,17 +53,25 @@ const Editor: FC<{}> = (props) => {
       editorRef.current?.requestFullscreen({ navigationUI: 'auto' }).then(() => setIsFullscreen(true));
   };
 
-  return <div ref={editorRef} className={styles.editor}>
+  return dataContext.data.ready && <div ref={editorRef} className={styles.editor}>
     <header>
       {/* <button onClick={_ => Save("output", JSON.stringify(dataContext.data.sheet))}>save</button>
       <button onClick={_ => dataContext.fn.setSheet(Load("output") as DataContextData["sheet"])}>load</button> */}
+      <button onClick={v => window.open("?" + serializeDataContextData(dataContext.data))}>print</button>
       <button onClick={toggleFullscreen}>fullscreen</button>
-      <MusicControl onPlay={_ => Play(Tone, dataContext.data.sheet.notes, dataContext.data.sheet.durations)} />
+      <MusicControl onPlay={_ => dataContext.data.ready
+        && dataContext.data.sheet.type == "diatonic"
+        && Play(Tone, dataContext.data.sheet.notes.map(v => v.note), dataContext.data.sheet.notes.map(v => v.duration))} />
       <ThreeDotMenu />
     </header>
     <main>
       <div className={styles.sheetWrapper} ref={mainRef}>
-        <MusicSheet abc={dataContext.fn.getABC(16)} options={{
+        <MusicSheet abc={
+          (dataContext.data.ready
+            && dataContext.data.sheet.type == "diatonic"
+            && abcFromDiatonicSheet(dataContext.data.sheet, 8))
+          || ""
+        } options={{
           initialClef: true,
           staffwidth: sheetWidth,
           wrap: {
@@ -73,8 +85,8 @@ const Editor: FC<{}> = (props) => {
     <footer>
       <span className={styles.harmonicaWrapper}>
         <DiatonicHarmonica
-          layout={(dataContext.data.layouts[0] as any)?.layout}
-          onSelectSound={x => dataContext.fn.addNote(x.note, FormatBend(x.dir, x.bend) + FormatHole(x.dir, x.position), dataContext.data.noteLength)}
+          layout={dataContext.data.layouts.find(v => v.label == (dataContext.data.ready && dataContext.data.sheet.layout)).layout}
+          onSelectSound={x => dataContext.data.ready && dataContext.fn.setSheet(addDiatonicNote(dataContext.data.sheet as DCT.BaseSheet & DCT.DiatonicSheet, x, dataContext.data.noteLength))}
         />
       </span>
 
@@ -86,15 +98,38 @@ const Editor: FC<{}> = (props) => {
   </div >
 };
 
+const LayoutFallback: React.FC<React.PropsWithChildren<{ fallback: ReactNode }>> = (props) => {
+  const dataContext = useContext(DataContext);
+
+  return <>
+    {
+      (
+        dataContext.data.ready
+        && dataContext.data.sheet.type != "unset"
+        && dataContext.data.layouts.some(
+          v => v.label == (dataContext.data.ready && dataContext.data.sheet.layout)
+        )
+      )
+
+        ? props.children
+        : props.fallback
+    }
+  </>
+}
+
+
 export default function Home() {
   return (
-    <ToneProvider fallback={"loading..."}>
+    <ToneProvider fallback={<Loading />}>
       <DataContextProvider layoutPath='layouts.json'>
         <Head>
           <title>Harm-tab</title>
         </Head>
 
-        <Editor />
+        <LayoutFallback fallback={<LayoutChooser />}>
+          <Editor />
+        </LayoutFallback>
+
       </DataContextProvider>
     </ToneProvider>
   )

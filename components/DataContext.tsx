@@ -1,69 +1,28 @@
 import React, { createContext, FC, PropsWithChildren, useEffect, useState } from "react";
-import { HarmLayouts, LoadHarmonicaLayouts } from "../data/Harmonica";
-
-export type DataContextData = {
-	ready: boolean,
-	layouts: HarmLayouts,
-	noteLength: string,
-
-	sheet: {
-		meter: string,
-		key: string,
-		title: string,
-		notes: string[],
-		durations: string[],
-		text: string[],
-	},
-};
+import { DataContext as DCT } from "../types/DataContext";
+import { LoadHarmonicaLayouts } from "../data/Harmonica";
 
 export type DataContextValue = {
-	data: DataContextData,
+	data: DCT.Data,
 
 	fn: {
-		getABC: (n?: number) => string,
-		addNote: (ABCnote: string, description: string, length: string) => boolean,
-		popNote: () => boolean,
 		setNoteLength: (newLength: string) => void,
-		setSheet: (newSheet: DataContextData["sheet"]) => void
+		setSheet: (newSheet: DCT.Sheet) => void,
+		setLayout: (newLayout: string) => void,
 	}
 };
 
-const DEFAULT_DATA: DataContextData = {
-	ready: false,
-	layouts: [],
-	noteLength: "8",
-	sheet: {
-		meter: "4/4",
-		key: "C",
-		title: "",
-		notes: [],
-		durations: [],
-		text: []
-	},
-};
-
-function groupArray<T = any>(arr: T[], n: number): T[][] {
-	let result: T[][] = [];
-
-	for (let i = 0; i < arr.length; i += n)
-		result.push(arr.slice(i, Math.min(i + n, arr.length)));
-
-	return result;
-}
-
 export const DataContext = createContext<DataContextValue>({
-	data: DEFAULT_DATA,
+	data: { ready: false },
 	fn: {
-		addNote: () => false,
-		getABC: () => "",
-		popNote: () => false,
 		setNoteLength: () => { },
-		setSheet: () => { }
+		setSheet: () => { },
+		setLayout: () => { }
 	},
 });
 
 export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string }>> = (props) => {
-	const [data, setData] = useState<DataContextData>(DEFAULT_DATA);
+	const [data, setData] = useState<DCT.Data>({ ready: false });
 
 	useEffect(() => {
 		fetch(props.layoutPath, { method: "GET", headers: { "Accept": "application/json" } })
@@ -74,6 +33,14 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string }>> 
 						...oldData,
 						ready: true,
 						layouts: LoadHarmonicaLayouts(t),
+						noteLength: "8",
+						sheet: {
+							type: "unset",
+							title: "",
+							key: "",
+							layout: "",
+							meter: "",
+						}
 					}));
 			});
 	}, [props.layoutPath]);
@@ -81,55 +48,9 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string }>> 
 	const providedValue: DataContextValue = {
 		data,
 		fn: {
-			addNote: (ABCnote, description, duration) => {
-				setData({
-					...data,
-					sheet: {
-						...data.sheet,
-						notes: [...data.sheet.notes, ABCnote],
-						durations: [...data.sheet.durations, duration],
-						text: [...data.sheet.text, description]
-					}
-				});
-
-				return true;
-			},
-			getABC: (n: number = 8) => {
-				const compiledNotes = data.sheet.notes.map((v, i) => v + data.sheet.durations[i]);
-				const groupedNotes = groupArray(compiledNotes, n);
-				const groupedText = groupArray(data.sheet.text, n);
-
-				const compiledSheet = groupedNotes.map((v, i) => {
-					return v.join(" ") + "\nw: " + groupedText[i].join(" ")
-				}).join("\n");
-
-				return [
-					`X:1`,
-					`T:${data.sheet.title}`,
-					`M:${data.sheet.meter}`,
-					`L:1/64`,
-					`K:${data.sheet.key}`,
-					`${compiledSheet}`
-				].join("\n")
-			},
-			popNote: () => {
-				if (data.sheet.notes.length == 0)
-					return false;
-
-				setData({
-					...data,
-					sheet: {
-						...data.sheet,
-						notes: data.sheet.notes.slice(0, -1),
-						text: data.sheet.text.slice(0, -1),
-						durations: data.sheet.durations.slice(0, -1),
-					}
-				});
-
-				return true;
-			},
-			setNoteLength: newNoteLength => setData({ ...data, noteLength: newNoteLength }),
-			setSheet: newSheet => setData({ ...data, sheet: newSheet }),
+			setNoteLength: newNoteLength => data.ready && setData({ ...data, noteLength: newNoteLength }),
+			setSheet: newSheet => data.ready && setData({ ...data, sheet: newSheet }),
+			setLayout: newLayout => data.ready && setData({ ...data, sheet: { ...data.sheet, layout: newLayout } }),
 		}
 	}
 

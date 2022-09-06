@@ -1,14 +1,4 @@
-import { DiaHarmLayout } from "./DiatonicHarmonica";
-
-export type HarmLayout = ({
-	type: "diatonic",
-	sign: string,
-	layout: DiaHarmLayout
-} | {
-	type: "chromatic"
-}) & {
-	label: string
-};
+import { HarmLayout } from "../types/Harmonica";
 
 type HarmLayoutFile = {
 	layouts: {
@@ -16,12 +6,10 @@ type HarmLayoutFile = {
 	}
 };
 
-export type HarmLayouts = HarmLayout[];
-
-const LoadHarmonicaLayouts = (data: string): HarmLayouts => {
+const LoadHarmonicaLayouts = (data: string): HarmLayout[] => {
 	const layoutData = JSON.parse(data) as HarmLayoutFile;
 
 	return Object.values(layoutData.layouts);
 };
 
-export {LoadHarmonicaLayouts};
+export { LoadHarmonicaLayouts };

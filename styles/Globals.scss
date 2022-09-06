@@ -7,3 +7,11 @@ body {
 * {
   box-sizing: border-box;
 }
+
+:root {
+  --background: #050921;
+  --foreground: white;
+
+  --primary-background: #0068df;
+  --primary-foreground: white;
+}

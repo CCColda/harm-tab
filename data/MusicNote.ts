@@ -3,10 +3,9 @@ export type DottedNoteDuration = 3 | 6 | 12 | 24 | 48 | 96;
 export type ToneNoteDuration = `${NoteDuration}n` | `${NoteDuration}n.`;
 export type AbcNoteDuration = `${NoteDuration | DottedNoteDuration}`;
 
-
 export type Note = "C" | "D" | "E" | "F" | "G" | "A" | "B";
 export type Octave = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-export type AbcNote = `${"=" | "_" | ""}${Note | Lowercase<Note>}${"," | "'" | ",," | "''" | ",,," | "'''" | ""}`
+export type AbcNote = "z" | `${"=" | "_" | ""}${Note | Lowercase<Note>}${"," | "'" | ",," | "''" | ",,," | "'''" | ""}`
 export type ToneNote = `${Note}${"#" | "b" | ""}${Octave | ""}`
 
 const ABC_NOTE_SCORES = Object.freeze({

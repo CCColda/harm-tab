@@ -1,0 +1,36 @@
+.layoutChooser {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+
+	color: var(--foreground);
+	background: var(--background);
+
+	select {
+		background: transparent;
+		color: var(--foreground);
+		padding: 0 1rem;
+		padding-bottom: 0.25rem;
+
+		border: none;
+		border-bottom: 2px solid var(--foreground);
+	}
+
+	button {
+		background: var(--primary-background);
+		color: var(--primary-foreground);
+
+		border: 0;
+		border-radius: 5px;
+		padding: 0.75rem 1.5rem;
+		margin: 1rem;
+	}
+}
