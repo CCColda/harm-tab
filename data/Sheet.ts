@@ -2,21 +2,14 @@ import { DataContext } from "../types/DataContext";
 import { DiaHarm } from "../types/Harmonica";
 import { groupArray } from "./Array";
 import { FormatBend, FormatHole } from "./DiatonicHarmonica";
+import { ABCNoteToNumber } from "./MusicNote";
 
 export function abcFromDiatonicSheet(diatonicSheet: DataContext.BaseSheet & DataContext.DiatonicSheet, n: number) {
-	/* const compiledNotes = data.sheet.notes.map((v, i) => v + data.sheet.durations[i]);
-	const groupedNotes = groupArray(compiledNotes, n);
-	const groupedText = groupArray(data.sheet.text, n);
-
-	const compiledSheet = groupedNotes.map((v, i) => {
-		return v.join(" ") + "\nw: " + groupedText[i].join(" ")
-	}).join("\n");
- */
-	const compiledSheet = groupArray(diatonicSheet.notes, n).map(
-		group =>
-			group.map(v => v.note + v.duration).join(" ") +
-			"\nw: " + group.map(v => FormatBend(v.dir, v.bend) + FormatHole(v.dir, v.position)).join(" ")
-	).join("\n");
+	const compiledSheet = groupArray(diatonicSheet.chords, n)
+		.map(group =>
+			group.map(chord => "[" + chord.notes.map(w => w.note).join("") + "]" + chord.duration).join(" ") +
+			"\nw: " + group.map(({ notes }) => [...notes].sort((a, b) => ABCNoteToNumber(a.note) - ABCNoteToNumber(b.note)).map(v => FormatBend(v.dir, v.bend) + FormatHole(v.dir, v.position)).join("")).join(" ")
+		).join("\n");
 
 	return [
 		`X:1`,
@@ -28,13 +21,19 @@ export function abcFromDiatonicSheet(diatonicSheet: DataContext.BaseSheet & Data
 	].join("\n");
 }
 
-export function addDiatonicNote(sheet: DataContext.BaseSheet & DataContext.DiatonicSheet, note: DiaHarm.SoundPosition, duration: string) {
+export function addDiatonicNote(sheet: DataContext.BaseSheet & DataContext.DiatonicSheet, notes: DiaHarm.SoundPosition[], duration: string) {
 	return {
 		...sheet,
-		notes: [...sheet.notes, { ...note, duration }]
+		chords: [...sheet.chords, { notes, duration }]
 	}
 }
 
-export function toneFromDiatonicSheet(diatonicSheet: DataContext.BaseSheet & DataContext.DiatonicSheet) {
-	
+export function extendDiatonicChord(sheet: DataContext.BaseSheet & DataContext.DiatonicSheet, notes: DiaHarm.SoundPosition[]) {
+	return {
+		...sheet,
+		chords: [...sheet.chords.slice(0, -1), {
+			notes: [...sheet.chords[sheet.chords.length - 1].notes, ...notes],
+			duration: sheet.chords[sheet.chords.length - 1].duration
+		}]
+	}
 }

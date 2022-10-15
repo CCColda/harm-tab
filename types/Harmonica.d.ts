@@ -25,6 +25,11 @@ export namespace DiaHarm {
 		`${PositionNum}`,
 		Sound[]
 	>;
+
+	export type Chord = {
+		notes: SoundPosition[],
+		duration: string,
+	};
 }
 
 export type HarmLayout = ({

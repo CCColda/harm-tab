@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react';
-import { DataContext } from './DataContext';
+import { DataContext } from '../contexts/DataContext';
 
-import styles from '../styles/NoteLengths.module.scss';
+import styles from '../../styles/NoteLengths.module.scss';
 
 export type NoteLengthsProps = {
 

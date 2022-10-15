@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import styles from '../styles/LayoutChooser.module.scss';
-import { DataContext } from "./DataContext";
+import styles from '../../styles/LayoutChooser.module.scss';
+import { DataContext } from "../contexts/DataContext";
 
 const LayoutChooser: React.FC<{}> = (props) => {
 	const dataContext = useContext(DataContext);
@@ -24,7 +24,7 @@ const LayoutChooser: React.FC<{}> = (props) => {
 				key: dataContext.data.layouts[layout].key,
 				layout: dataContext.data.layouts[layout].label,
 				meter: "4/4",
-				notes: [],
+				chords: [],
 				title: "",
 			})}>Next</button>
 	</div >

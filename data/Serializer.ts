@@ -2,13 +2,12 @@ import { DiaHarm } from "../types/Harmonica";
 import { DataContext } from "../types/DataContext";
 
 const SOUND_IDENTIFIERS = Object.freeze(
-	Array(10 * 4 * 2)
-		.fill(0)
-		.map((_, i) => String.fromCharCode("+".charCodeAt(0) + i))
+	Array(10 * 4 * 2).fill(0).map((_, i) => String.fromCharCode("+".charCodeAt(0) + i))
 );
 
 const LAYOUT_MINOR_SEPARATOR = Object.freeze("~");
 const LAYOUT_MAJOR_SEPARATOR = Object.freeze("|");
+const LAYOUT_NOTE_SEPARATOR = Object.freeze("!");
 
 function serializeDiaHarmPos(position: DiaHarm.Position): string {
 	return SOUND_IDENTIFIERS[
@@ -73,7 +72,9 @@ export function serializeDataContextData(data: DataContext.Data): string | undef
 				layout.label,
 				serializeDiaHarmLayout(layout.layout),
 				[data.sheet.title, data.sheet.meter, data.sheet.key].join(LAYOUT_MINOR_SEPARATOR),
-				data.sheet.notes.map(v => serializeDiaHarmPos(v) + v.duration).join(LAYOUT_MINOR_SEPARATOR)
+				data.sheet.chords.map(({ notes, duration }) =>
+					notes.map(note => serializeDiaHarmPos(note)).join(LAYOUT_NOTE_SEPARATOR) + duration
+				).join(LAYOUT_MINOR_SEPARATOR)
 			];
 			break;
 		}
@@ -90,47 +91,62 @@ export function serializeDataContextData(data: DataContext.Data): string | undef
 
 
 export function parseDataContextData(dataString: string): DataContext.Data {
-	switch (dataString[0]) {
-		case "D": {
-			const dataSegments = dataString.split(LAYOUT_MAJOR_SEPARATOR);
-			const sheetSegment = dataSegments[3].split(LAYOUT_MINOR_SEPARATOR);
-			const positionsSegment = dataSegments[4].split(LAYOUT_MINOR_SEPARATOR);
+	try {
+		switch (dataString[0]) {
+			case "D": {
+				const dataSegments = dataString.split(LAYOUT_MAJOR_SEPARATOR);
+				const sheetSegment = dataSegments[3].split(LAYOUT_MINOR_SEPARATOR);
+				const positionsSegment = dataSegments[4].split(LAYOUT_MINOR_SEPARATOR);
 
-			const label = dataSegments[1];
-			const layout = parseDiaHarmLayout(dataSegments[2]);
+				const label = dataSegments[1];
+				const layout = parseDiaHarmLayout(dataSegments[2]);
 
-			return {
-				ready: true,
-				layouts: [
-					{
-						type: "diatonic",
-						sign: dataSegments[0].slice(1),
-						label,
-						layout
-					}
-				],
-				noteLength: "8",
-				sheet: {
-					type: "diatonic",
-					title: sheetSegment[0],
-					meter: sheetSegment[1],
-					key: sheetSegment[2],
-					notes: positionsSegment.map(v => {
-						const parsed = parseDiaHarmPos(v[0]);
-						return {
-							...parsed,
-							note: layout[parsed.position].find(w => w.bend == parsed.bend && w.dir == parsed.dir).note,
-							duration: v.slice(1)
+				return {
+					ready: true,
+					mode: "note",
+					layouts: [
+						{
+							type: "diatonic",
+							sign: dataSegments[0].slice(1),
+							label,
+							layout
 						}
-					}),
-					layout: label
-				}
-			};
+					],
+					noteLength: "8",
+					sheet: {
+						type: "diatonic",
+						title: sheetSegment[0],
+						meter: sheetSegment[1],
+						key: sheetSegment[2],
+						chords: positionsSegment.map(chord => {
+							console.log(chord);
+							const notes = chord.slice(0, -1).split(LAYOUT_NOTE_SEPARATOR);
+
+							return {
+								notes: notes.map(note => {
+									const parsed = parseDiaHarmPos(note);
+
+									return {
+										...parsed,
+										note: layout[parsed.position].find(w => w.bend == parsed.bend && w.dir == parsed.dir).note,
+									};
+								}),
+								duration: chord.slice(-1)
+							}
+						}),
+						layout: label
+					}
+				};
+			}
+			case "C": {
+				return {
+					ready: false
+				};
+			}
 		}
-		case "C": {
-			return {
-				ready: false
-			};
-		}
+	}
+	catch (exc) {
+		console.error("Error while loading: ", exc);
+		return { ready: false };
 	}
 }

@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react';
-import { DataContext } from './DataContext';
+import { DataContext } from '../contexts/DataContext';
 
-import styles from '../styles/MusicalElements.module.scss';
+import styles from '../../styles/MusicalElements.module.scss';
 
 const MusicalElements: FC<{}> = (_props) => {
 	const dataContext = useContext(DataContext);
@@ -11,7 +11,7 @@ const MusicalElements: FC<{}> = (_props) => {
 			&& dataContext.data.sheet.type == "diatonic"
 			&& dataContext.fn.setSheet({
 				...dataContext.data.sheet,
-				notes: dataContext.data.sheet.notes.slice(0, -1)
+				chords: dataContext.data.sheet.chords.slice(0, -1)
 			})}>⇤</button>
 
 		{/* TODO SERIALIZE <button onClick={_ => dataContext.data.ready

@@ -10,10 +10,8 @@ export namespace DataContext {
 
 	export type DiatonicSheet = {
 		type: "diatonic",
-		notes: Duration<DiaHarm.SoundPosition>[];
+		chords: DiaHarm.Chord[],
 	};
-
-	export type Duration<T> = T & { duration: string };
 
 	export type Sheet = BaseSheet & (DiatonicSheet | {
 		type: "chromatic"
@@ -24,6 +22,7 @@ export namespace DataContext {
 	export type Data = {
 		ready: true,
 		noteLength: string,
+		mode: "chord" | "note",
 
 		layouts: HarmLayout[],
 		sheet: Sheet;

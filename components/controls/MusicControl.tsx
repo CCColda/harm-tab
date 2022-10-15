@@ -1,6 +1,6 @@
-import { FC, useRef } from "react";
+import { FC } from "react";
 
-import styles from "../styles/MusicControl.module.scss";
+import styles from "../../styles/MusicControl.module.scss";
 
 export type MusicControlProps = {
     onPlay?: CallableFunction,

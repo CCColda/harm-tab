@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from "react";
-import { FormatBendWithNumber } from "../data/DiatonicHarmonica";
-import { FormatABCNote } from "../data/MusicNote";
+import { FormatBendWithNumber } from "../../data/DiatonicHarmonica";
+import { FormatABCNote } from "../../data/MusicNote";
 
-import styles from "../styles/DiatonicHarmonica.module.scss"
-import { DiaHarm } from "../types/Harmonica";
+import styles from "../../styles/DiatonicHarmonica.module.scss"
+import { DiaHarm } from "../../types/Harmonica";
 
 export type DiatonicHarmonicaProps = {
 	layout?: DiaHarm.Layout,
