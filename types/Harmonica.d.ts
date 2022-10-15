@@ -1,3 +1,4 @@
+import { type } from "os";
 import { AbcNote } from "../data/MusicNote";
 
 export namespace DiaHarm {
@@ -27,8 +28,18 @@ export namespace DiaHarm {
 	>;
 
 	export type Chord = {
+		type: "chord",
 		notes: SoundPosition[],
 		duration: string,
+	};
+
+	export type Silence = {
+		type: "silence",
+		duration: string,
+	};
+
+	export type Bar = {
+		type: "bar",
 	};
 }
 

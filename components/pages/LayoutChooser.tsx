@@ -7,7 +7,6 @@ const LayoutChooser: React.FC<{}> = (props) => {
 	const [layout, setLayout] = useState<number>(0);
 
 	return <div className={styles.layoutChooser}>
-		<p>{JSON.stringify(dataContext.data)}</p>
 		<h1>Choose a layout</h1>
 		<select className={styles.layouts} onChange={e => setLayout(Number(e.target.value))}>
 			{
@@ -16,7 +15,6 @@ const LayoutChooser: React.FC<{}> = (props) => {
 				)
 			}
 		</select>
-		<button onClick={_ => console.log((dataContext.data as any).sheet, layout)}>Hello</button>
 		<button onClick={_ => dataContext.data.ready
 			&& dataContext.fn.setSheet({
 				...dataContext.data.sheet,

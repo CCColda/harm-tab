@@ -6,10 +6,38 @@ import { ABCNoteToNumber } from "./MusicNote";
 
 export function abcFromDiatonicSheet(diatonicSheet: DataContext.BaseSheet & DataContext.DiatonicSheet, n: number) {
 	const compiledSheet = groupArray(diatonicSheet.chords, n)
-		.map(group =>
-			group.map(chord => "[" + chord.notes.map(w => w.note).join("") + "]" + chord.duration).join(" ") +
-			"\nw: " + group.map(({ notes }) => [...notes].sort((a, b) => ABCNoteToNumber(a.note) - ABCNoteToNumber(b.note)).map(v => FormatBend(v.dir, v.bend) + FormatHole(v.dir, v.position)).join("")).join(" ")
-		).join("\n");
+		.map(group => {
+			const notes = group.map(
+				chord => {
+					switch (chord.type) {
+						case "bar":
+							return "|";
+						case "silence":
+							return "z" + chord.duration;
+						case "chord":
+							return "[" + chord.notes.map(w => w.note).join("") + "]" + chord.duration;
+					}
+				}
+			);
+
+			const words = group.map(
+				chord => {
+					switch (chord.type) {
+						case "bar":
+							return "|";
+						case "silence":
+							return "";
+						case "chord":
+							return [...chord.notes]
+								.sort((a, b) => ABCNoteToNumber(a.note) - ABCNoteToNumber(b.note))
+								.map(v => FormatBend(v.dir, v.bend) + FormatHole(v.dir, v.position))
+								.join("")
+					}
+				}
+			);
+
+			return notes.join(" ") + "\nw: " + words.join(" ");
+		}).join("\n");
 
 	return [
 		`X:1`,
@@ -17,23 +45,43 @@ export function abcFromDiatonicSheet(diatonicSheet: DataContext.BaseSheet & Data
 		`M:${diatonicSheet.meter}`,
 		`L:1/64`,
 		`K:${diatonicSheet.key}`,
-		`${compiledSheet}`
+		compiledSheet
 	].join("\n");
 }
 
-export function addDiatonicNote(sheet: DataContext.BaseSheet & DataContext.DiatonicSheet, notes: DiaHarm.SoundPosition[], duration: string) {
+export function addDiatonicNote(sheet: DataContext.BaseSheet & DataContext.DiatonicSheet, notes: DiaHarm.SoundPosition[], duration: string): typeof sheet {
 	return {
 		...sheet,
-		chords: [...sheet.chords, { notes, duration }]
+		chords: [...sheet.chords, { type: "chord", notes, duration }]
 	}
 }
 
-export function extendDiatonicChord(sheet: DataContext.BaseSheet & DataContext.DiatonicSheet, notes: DiaHarm.SoundPosition[]) {
+export function addSilence(sheet: DataContext.BaseSheet & DataContext.DiatonicSheet, duration: string): typeof sheet {
 	return {
 		...sheet,
-		chords: [...sheet.chords.slice(0, -1), {
-			notes: [...sheet.chords[sheet.chords.length - 1].notes, ...notes],
-			duration: sheet.chords[sheet.chords.length - 1].duration
-		}]
+		chords: [...sheet.chords, { type: "silence", duration }]
 	}
+}
+
+export function addBar(sheet: DataContext.BaseSheet & DataContext.DiatonicSheet): typeof sheet {
+	return {
+		...sheet,
+		chords: [...sheet.chords, { type: "bar" }]
+	}
+}
+
+export function extendDiatonicChord(sheet: DataContext.BaseSheet & DataContext.DiatonicSheet, notes: DiaHarm.SoundPosition[], fallbackDuration: string): typeof sheet {
+	const last = sheet.chords[sheet.chords.length - 1];
+
+	if (last.type == "chord")
+		return {
+			...sheet,
+			chords: [...sheet.chords.slice(0, -1), {
+				type: "chord",
+				notes: [...last.notes, ...notes],
+				duration: last.duration
+			}]
+		}
+	else
+		return addDiatonicNote(sheet, notes, fallbackDuration);
 }

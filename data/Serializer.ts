@@ -5,9 +5,12 @@ const SOUND_IDENTIFIERS = Object.freeze(
 	Array(10 * 4 * 2).fill(0).map((_, i) => String.fromCharCode("+".charCodeAt(0) + i))
 );
 
-const LAYOUT_MINOR_SEPARATOR = Object.freeze("~");
-const LAYOUT_MAJOR_SEPARATOR = Object.freeze("|");
-const LAYOUT_NOTE_SEPARATOR = Object.freeze("!");
+const LAYOUT_MINOR_SEPARATOR = Object.freeze("!");
+const LAYOUT_MAJOR_SEPARATOR = Object.freeze("#");
+const LAYOUT_NOTE_SEPARATOR = Object.freeze("$");
+
+const SILENCE = Object.freeze("~");
+const BAR = Object.freeze("|");
 
 function serializeDiaHarmPos(position: DiaHarm.Position): string {
 	return SOUND_IDENTIFIERS[
@@ -72,9 +75,16 @@ export function serializeDataContextData(data: DataContext.Data): string | undef
 				layout.label,
 				serializeDiaHarmLayout(layout.layout),
 				[data.sheet.title, data.sheet.meter, data.sheet.key].join(LAYOUT_MINOR_SEPARATOR),
-				data.sheet.chords.map(({ notes, duration }) =>
-					notes.map(note => serializeDiaHarmPos(note)).join(LAYOUT_NOTE_SEPARATOR) + duration
-				).join(LAYOUT_MINOR_SEPARATOR)
+				data.sheet.chords.map(chord => {
+					switch (chord.type) {
+						case "bar":
+							return BAR;
+						case "silence":
+							return SILENCE + chord.duration;
+						case "chord":
+							return chord.notes.map(note => serializeDiaHarmPos(note)).join(LAYOUT_NOTE_SEPARATOR) + chord.duration;
+					}
+				}).join(LAYOUT_MINOR_SEPARATOR)
 			];
 			break;
 		}
@@ -120,19 +130,35 @@ export function parseDataContextData(dataString: string): DataContext.Data {
 						key: sheetSegment[2],
 						chords: positionsSegment.map(chord => {
 							console.log(chord);
-							const notes = chord.slice(0, -1).split(LAYOUT_NOTE_SEPARATOR);
 
-							return {
-								notes: notes.map(note => {
-									const parsed = parseDiaHarmPos(note);
-
-									return {
-										...parsed,
-										note: layout[parsed.position].find(w => w.bend == parsed.bend && w.dir == parsed.dir).note,
-									};
-								}),
-								duration: chord.slice(-1)
+							if (chord.startsWith(BAR)) {
+								return {
+									type: "bar"
+								};
 							}
+							else if (chord.startsWith(SILENCE)) {
+								return {
+									type: "silence",
+									duration: chord.slice(SILENCE.length)
+								};
+							}
+							else {
+								const notes = chord.slice(0, -1).split(LAYOUT_NOTE_SEPARATOR);
+
+								return {
+									type: "chord",
+									notes: notes.map(note => {
+										const parsed = parseDiaHarmPos(note);
+
+										return {
+											...parsed,
+											note: layout[parsed.position].find(w => w.bend == parsed.bend && w.dir == parsed.dir).note,
+										};
+									}),
+									duration: chord.slice(-1)
+								};
+							}
+
 						}),
 						layout: label
 					}

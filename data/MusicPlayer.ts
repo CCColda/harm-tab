@@ -11,13 +11,16 @@ const Play = (Tone: typeof import("tone"), chords: string[][], durations: string
 		if (!durations[i]) continue;
 
 		const dur = ABCNoteDurationToToneDuration(durations[i] as AbcNoteDuration); /* TODO */
-		const notes = chords[i].map(v => ABCNoteToToneNote(v)).filter(v => !!v);
 
-		synth.triggerAttackRelease(
-			notes,
-			Array(notes.length).fill(dur),
-			time
-		);
+		if (!chords[i].includes("z")) {
+			const notes = chords[i].map(v => ABCNoteToToneNote(v)).filter(v => !!v);
+
+			synth.triggerAttackRelease(
+				notes,
+				Array(notes.length).fill(dur),
+				time
+			);
+		}
 
 		time = time + Tone.Time(dur).toSeconds();
 	}

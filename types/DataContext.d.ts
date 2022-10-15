@@ -10,7 +10,7 @@ export namespace DataContext {
 
 	export type DiatonicSheet = {
 		type: "diatonic",
-		chords: DiaHarm.Chord[],
+		chords: (DiaHarm.Chord | DiaHarm.Silence | DiaHarm.Bar)[],
 	};
 
 	export type Sheet = BaseSheet & (DiatonicSheet | {

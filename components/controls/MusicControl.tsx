@@ -24,8 +24,17 @@ const MusicControl: FC<{}> = (props) => {
 
             const newControls = Play(
                 Tone,
-                dataContext.data.sheet.chords.map(chord => chord.notes.map(v => v.note)),
-                dataContext.data.sheet.chords.map(v => v.duration)
+                dataContext.data.sheet.chords.map(chord => {
+                    switch (chord.type) {
+                        case "bar":
+                            return [];
+                        case "silence":
+                            return ["z"];
+                        case "chord":
+                            return chord.notes.map(v => v.note);
+                    }
+                }),
+                dataContext.data.sheet.chords.map(v => v.type == "bar" ? "" : v.duration)
             );
 
             newControls.promise?.then(v => {
