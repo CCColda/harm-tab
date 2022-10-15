@@ -52,10 +52,8 @@ const Editor: FC<{}> = (props) => {
 
 	return dataContext.data.ready && <div ref={editorRef} className={styles.editor}>
 		<header>
-			{/* <button onClick={_ => Save("output", JSON.stringify(dataContext.data.sheet))}>save</button>
-		<button onClick={_ => dataContext.fn.setSheet(Load("output") as DataContextData["sheet"])}>load</button> */}
-			<button onClick={v => window.open("?" + serializeDataContextData(dataContext.data))}>print</button>
-			<button onClick={toggleFullscreen}>fullscreen</button>
+			<button onClick={v => window.open("?" + serializeDataContextData(dataContext.data))}>🔗</button>
+			<button onClick={toggleFullscreen}>⛶</button>
 			<MusicControl />
 			<ThreeDotMenu />
 		</header>

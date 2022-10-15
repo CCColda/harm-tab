@@ -1,53 +1,59 @@
 export default class Storage {
-	private static localStorage = window.localStorage;
 	private static readonly registry = "__registry";
 	private static readonly count = "__count";
 
-	private static transformName(name: string) {
+	private storageObject: typeof localStorage;
+
+	constructor(storageObject: typeof localStorage) {
+		this.storageObject = storageObject;
+	}
+
+	private transformName(name: string) {
 		return name.replace(/[^a-zA-Z0-9_]/g, '_');
 	}
 
-	static addToRegistry(name: string) {
-		this.localStorage.setItem(this.registry, this.localStorage.getItem(this.registry) + "," + name);
-		this.localStorage.setItem(this.count, `${this.getCount() + 1}`);
+	addToRegistry(name: string) {
+		this.storageObject.setItem(Storage.registry, this.storageObject.getItem(Storage.registry) + "," + name);
+		this.storageObject.setItem(Storage.count, `${this.count + 1}`);
 	}
 
-	static findInRegistry(name: string) {
+	findInRegistry(name: string) {
 		const transformedName = this.transformName(name);
 
-		return this.getRegistry().some(v => v == transformedName);
+		return this.registry.some(v => v == transformedName);
 	}
 
-	static removeFromRegistry(name: string): boolean {
-		const registryData = this.getRegistry();
+	removeFromRegistry(name: string): boolean {
+		const registryData = this.registry;
+
 		const index = registryData.findIndex(v => v == name);
 		if (index == -1)
 			return false;
 
 		registryData.splice(index);
-		this.localStorage.setItem(this.registry, registryData.join(','));
-		this.localStorage.setItem(this.count, `${this.getCount() - 1}`);
+		this.storageObject.setItem(Storage.registry, registryData.join(','));
+		this.storageObject.setItem(Storage.count, `${this.count - 1}`);
 
 		return true;
 	}
 
-	static getRegistry(): string[] {
-		return (this.localStorage.getItem(this.registry) ?? "").split(',');
+	get registry(): string[] {
+		return (this.storageObject.getItem(Storage.registry) ?? "").split(',');
 	}
 
-	static getCount(): number {
-		return Number(this.localStorage.getItem(this.count) ?? "0");
+	get count(): number {
+		return Number(this.storageObject.getItem(Storage.count) ?? "0");
 	}
 
-	static setKey(name: string, key: string) {
-		this.localStorage.setItem(this.transformName(name), key);
+	setKey(name: string, key: string) {
+		this.storageObject.setItem(this.transformName(name), key);
 	}
 
-	static getKey(name: string): string | null {
-		return this.localStorage.getItem(this.transformName(name));
+	getKey(name: string): string | null {
+		return this.storageObject.getItem(this.transformName(name));
 	}
 
-	static resetKey(name: string) {
-		this.localStorage.removeItem(this.transformName(name));
+	resetKey(name: string) {
+		this.storageObject.removeItem(this.transformName(name));
 	}
 };
