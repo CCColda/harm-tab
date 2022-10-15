@@ -1,0 +1,35 @@
+@import './Panel.scss';
+
+.chordSwitcher {
+	@extend .panel;
+
+	button {
+		padding: 0.5rem;
+
+		font-size: 2rem;
+		vertical-align: middle;
+
+		border: none;
+
+		height: 100%;
+
+		background: none;
+
+		&:active,
+		&:hover {
+			background: var(--panel-selected);
+		}
+
+		&:first-of-type {
+			border-radius: $panel-border-radius 0 0 $panel-border-radius;
+		}
+
+		&:last-of-type {
+			border-radius: 0 $panel-border-radius $panel-border-radius 0;
+		}
+	}
+
+	button.active {
+		background-color: var(--panel-selected);
+	}
+}
