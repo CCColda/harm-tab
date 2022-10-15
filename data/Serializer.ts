@@ -147,6 +147,8 @@ export function parseDataContextData(dataString: string): DataContext.Data {
 	}
 	catch (exc) {
 		console.error("Error while loading: ", exc);
+	}
+	finally {
 		return { ready: false };
 	}
 }

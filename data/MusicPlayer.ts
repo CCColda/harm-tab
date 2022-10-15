@@ -1,20 +1,55 @@
+import { Transport } from "../node_modules/tone/build/esm/index";
 import { AbcNoteDuration, ABCNoteDurationToToneDuration, ABCNoteToToneNote } from "./MusicNote";
 
-const Play = (Tone: typeof import("tone"), notes: string[], durations: string[]) => {
-	const synth = new Tone.Synth().toDestination();
+const Play = (Tone: typeof import("tone"), chords: string[][], durations: string[], timeMargin: number = 1) => {
+	const synth = new Tone.PolySynth().toDestination();
+	synth.sync();
 
-	let time = Tone.now();
+	let time = 0;
 
-	for (let i = 0; i < notes.length; ++i) {
+	for (let i = 0; i < chords.length; ++i) {
 		if (!durations[i]) continue;
 
-		const note = ABCNoteToToneNote(notes[i]);
 		const dur = ABCNoteDurationToToneDuration(durations[i] as AbcNoteDuration); /* TODO */
+		const notes = chords[i].map(v => ABCNoteToToneNote(v)).filter(v => !!v);
 
-		if (note)
-			synth.triggerAttackRelease(note, dur, time);
+		synth.triggerAttackRelease(
+			notes,
+			Array(notes.length).fill(dur),
+			time
+		);
 
 		time = time + Tone.Time(dur).toSeconds();
+	}
+
+	time = time + timeMargin;
+
+	let timeout: NodeJS.Timeout;
+	let resolve: (success: boolean) => void = null;
+
+	return {
+		promise: new Promise<boolean>((res, rej) => {
+			resolve = res;
+			timeout = Tone.getContext().setTimeout(() => {
+				synth.disconnect();
+				synth.dispose();
+				Tone.Transport.clear();
+				Tone.Transport.stop();
+				console.log("disposed");
+				resolve(true);
+			}, time);
+			Tone.Transport.start();
+		}),
+		stop: () => {
+			if (timeout)
+				Tone.getContext().clearTimeout(timeout);
+
+			synth.disconnect();
+			synth.dispose();
+			Tone.Transport.clear();
+			Tone.Transport.stop();
+			resolve(false);
+		}
 	}
 }
 

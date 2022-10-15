@@ -19,15 +19,6 @@ export default function Home() {
 
     <ToneProvider fallback={<Loading />}>
       <DataContextProvider layoutPath='layouts.json' preparsedData={parsedLayout}>
-        <div style={{ color: "white", background: "black", fontFamily: "monospace", opacity: "75%", position: "fixed", top: 0, left: 0, right: "50%", zIndex: "5" }}>
-          <p >
-            {router.asPath.slice(2)}
-            {/* {Object.entries(router.query).map(v => v.join(" ")).join(";")} */}
-          </p>
-          <p>
-            {JSON.stringify()}
-          </p>
-        </div>
 
         <LayoutFallback fallback={<LayoutChooser />}>
           <Editor />

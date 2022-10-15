@@ -7,76 +7,52 @@ $lift-rate: 0.3rem;
     --musicbutton-hover: #AAA;
     --musicbutton-active: rgb(0, 201, 0);
 
-    .hiddenRadio {
+    button {
         display: inline-block;
 
-        input {
-            display: none;
-        }
-    }
+        border: 0;
+        padding: .5rem;
+        background: transparent;
 
-    .styledRadio {
-        >span {
-            display: block;
-            
-            border: 0;
-            padding: .5rem;
-            background: transparent;
-    
-            border-bottom: 0.25rem solid var(--musicbutton-foreground);
-            
-            transition: $transition-speed margin-bottom, $transition-speed padding-bottom;
-        }
+        border-bottom: 0.25rem solid var(--musicbutton-foreground);
 
         &:hover {
-            >span {
-                margin-bottom: $lift-rate;
-                padding-bottom: .5rem - $lift-rate;
-    
-                border-bottom-color: var(--musicbutton-hover);
-            }
-        }
+            margin-bottom: $lift-rate;
+            padding-bottom: .5rem - $lift-rate;
 
-        &>input:checked+span {
-            border-bottom-color: var(--musicbutton-active);
+            border-bottom-color: var(--musicbutton-hover);
         }
     }
 
-    .play {
-        @extend .hiddenRadio;
-        @extend .styledRadio;
-
-        >span::before {
+    button.play {
+        &::before {
             content: '';
             display: inline-block;
             width: 0px;
             height: 0px;
-            
+
             transform: scaleY($squish-rate) translateX(-25%) rotate(45deg);
-            
+
             border: .75rem solid transparent;
             border-top-color: var(--musicbutton-foreground);
             border-right-color: var(--musicbutton-foreground);
-        
+
             transition: $transition-speed border-top-color, $transition-speed border-right-color;
         }
 
-        &:hover>span::before {
+        &:hover::before {
             border-top-color: var(--musicbutton-hover);
             border-right-color: var(--musicbutton-hover);
         }
 
-        &>input:checked+span::before {
-            border-top-color: var(--musicbutton-active);
-            border-right-color: var(--musicbutton-active);
-        }
+        transition: $transition-speed border-color,
+        $transition-speed border-style,
+        $transition-speed margin-bottom,
+        $transition-speed padding-bottom;
     }
 
     .stop {
-        @extend .hiddenRadio;
-        @extend .styledRadio;
-
-        >span::before {
+        &::before {
             content: '';
             display: inline-block;
             border: 0.75rem solid var(--musicbutton-foreground);
@@ -85,12 +61,44 @@ $lift-rate: 0.3rem;
             transition: $transition-speed border-color;
         }
 
-        &:hover>span::before {
+        &:hover::before {
             border-color: var(--musicbutton-hover);
         }
 
-        >input:checked+span::before {
-            border-color: var(--musicbutton-active);
+        transition: $transition-speed border-color,
+        $transition-speed border-style,
+        $transition-speed margin-bottom,
+        $transition-speed padding-bottom;
+    }
+
+
+    &.playing {
+        >.play {
+            border-bottom-color: var(--musicbutton-active);
+
+            &::before {
+                border-top-color: var(--musicbutton-active);
+                border-right-color: var(--musicbutton-active);
+            }
+        }
+
+        >.stop {
+            border-bottom-style: dashed;
         }
     }
+
+    &:not(.playing) {
+        &:not(.playing)>.play {
+            border-bottom-style: dashed;
+        }
+
+        &:not(.playing)>.stop {
+            border-color: var(--musicbutton-active);
+
+            &::before {
+                border-color: var(--musicbutton-active);
+            }
+        }
+    }
+
 }

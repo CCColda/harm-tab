@@ -19,12 +19,10 @@ import { ChordSwitcher } from '../controls/ChordSwitcher';
 import { FC, useContext, useRef, useState } from 'react';
 
 import styles from '../../styles/index.module.scss'
-import { Play } from '../../data/MusicPlayer';
 
 
 const Editor: FC<{}> = (props) => {
 	const dataContext = useContext(DataContext);
-	const Tone = useContext(ToneContext);
 
 	const [isFullscreen, setIsFullscreen] = useState(false);
 	const [sheetWidth, setSheetWidth] = useState(0);
@@ -58,9 +56,7 @@ const Editor: FC<{}> = (props) => {
 		<button onClick={_ => dataContext.fn.setSheet(Load("output") as DataContextData["sheet"])}>load</button> */}
 			<button onClick={v => window.open("?" + serializeDataContextData(dataContext.data))}>print</button>
 			<button onClick={toggleFullscreen}>fullscreen</button>
-			<MusicControl onPlay={_ => dataContext.data.ready
-				&& dataContext.data.sheet.type == "diatonic"
-				&& Play(Tone, dataContext.data.sheet.chords.map(v => v.note), dataContext.data.sheet.chords.map(v => v.duration))} />
+			<MusicControl />
 			<ThreeDotMenu />
 		</header>
 		<main>
