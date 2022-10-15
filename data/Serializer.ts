@@ -143,12 +143,13 @@ export function parseDataContextData(dataString: string): DataContext.Data {
 					ready: false
 				};
 			}
+			default: {
+				return { ready: false };
+			}
 		}
 	}
 	catch (exc) {
 		console.error("Error while loading: ", exc);
-	}
-	finally {
 		return { ready: false };
 	}
 }
