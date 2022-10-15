@@ -24,6 +24,10 @@
 		border-bottom: 2px solid var(--foreground);
 	}
 
+	option {
+		color: black;
+	}
+
 	button {
 		background: var(--primary-background);
 		color: var(--primary-foreground);
