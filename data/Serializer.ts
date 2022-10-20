@@ -96,15 +96,16 @@ export function serializeDataContextData(data: DataContext.Data): string | undef
 		}
 	}
 
-	return result.join(LAYOUT_MAJOR_SEPARATOR);
+	return encodeURI(result.join(LAYOUT_MAJOR_SEPARATOR));
 }
 
 
 export function parseDataContextData(dataString: string): DataContext.Data {
+	const decoded = decodeURI(dataString);
 	try {
-		switch (dataString[0]) {
+		switch (decoded[0]) {
 			case "D": {
-				const dataSegments = dataString.split(LAYOUT_MAJOR_SEPARATOR);
+				const dataSegments = decoded.split(LAYOUT_MAJOR_SEPARATOR);
 				const sheetSegment = dataSegments[3].split(LAYOUT_MINOR_SEPARATOR);
 				const positionsSegment = dataSegments[4].split(LAYOUT_MINOR_SEPARATOR);
 
@@ -129,8 +130,6 @@ export function parseDataContextData(dataString: string): DataContext.Data {
 						meter: sheetSegment[1],
 						key: sheetSegment[2],
 						chords: positionsSegment.map(chord => {
-							console.log(chord);
-
 							if (chord.startsWith(BAR)) {
 								return {
 									type: "bar"
@@ -143,7 +142,7 @@ export function parseDataContextData(dataString: string): DataContext.Data {
 								};
 							}
 							else {
-								const notes = chord.slice(0, -1).split(LAYOUT_NOTE_SEPARATOR);
+								const notes = chord.slice(0, 1).split(LAYOUT_NOTE_SEPARATOR);
 
 								return {
 									type: "chord",
@@ -155,7 +154,7 @@ export function parseDataContextData(dataString: string): DataContext.Data {
 											note: layout[parsed.position].find(w => w.bend == parsed.bend && w.dir == parsed.dir).note,
 										};
 									}),
-									duration: chord.slice(-1)
+									duration: chord.slice(1)
 								};
 							}
 
