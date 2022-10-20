@@ -27,7 +27,7 @@ const Play = (Tone: typeof import("tone"), chords: string[][], durations: string
 
 	time = time + timeMargin;
 
-	let timeout: NodeJS.Timeout;
+	let timeout: number;
 	let resolve: (success: boolean) => void = null;
 
 	return {
@@ -36,7 +36,7 @@ const Play = (Tone: typeof import("tone"), chords: string[][], durations: string
 			timeout = Tone.getContext().setTimeout(() => {
 				synth.disconnect();
 				synth.dispose();
-				Tone.Transport.clear();
+				Tone.Transport.cancel();
 				Tone.Transport.stop();
 				console.log("disposed");
 				resolve(true);
@@ -49,7 +49,7 @@ const Play = (Tone: typeof import("tone"), chords: string[][], durations: string
 
 			synth.disconnect();
 			synth.dispose();
-			Tone.Transport.clear();
+			Tone.Transport.cancel();
 			Tone.Transport.stop();
 			resolve(false);
 		}

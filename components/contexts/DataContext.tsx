@@ -50,7 +50,7 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string, pre
 							}
 						}));
 				});
-	}, [props.layoutPath, props.preparsedData]);
+	}, [props.layoutPath, props.preparsedData, data.ready]);
 
 	const providedValue: DataContextValue = {
 		data,

@@ -84,7 +84,7 @@ const Editor: FC<{}> = (props) => {
 							?
 							addDiatonicNote(dataContext.data.sheet as DCT.BaseSheet & DCT.DiatonicSheet, [x], dataContext.data.noteLength)
 							:
-							extendDiatonicChord(dataContext.data.sheet as DCT.BaseSheet & DCT.DiatonicSheet, [x])
+							extendDiatonicChord(dataContext.data.sheet as DCT.BaseSheet & DCT.DiatonicSheet, [x], dataContext.data.noteLength)
 					)}
 				/>
 			</span>
