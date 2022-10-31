@@ -1,0 +1,103 @@
+$animation-speed: 1s;
+$border-width: 0.75rem;
+
+.loading {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	color: var(--foreground);
+	background: var(--background);
+
+	@keyframes dotmove {
+		0% {
+			border-width: $border-width;
+			top: 0;
+		}
+
+		50% {
+			border-width: $border-width * 1.25;
+			top: 50%;
+		}
+
+		100% {
+			border-width: $border-width;
+			top: 100%;
+		}
+	}
+
+	.animationContainer {
+		margin: $border-width;
+		position: relative;
+		width: 5rem;
+		height: 5rem;
+
+		.dot {
+			position: absolute;
+		}
+
+		.dot:nth-of-type(1) {
+			top: 0;
+			left: 0;
+			animation: dotmove $animation-speed infinite alternate;
+		}
+
+		.dot:nth-of-type(2) {
+			top: 0;
+			right: 0;
+			animation: dotmove $animation-speed infinite alternate;
+			animation-delay: $animation-speed / 2;
+		}
+
+		.dot:nth-of-type(3) {
+			top: 100%;
+			left: 0;
+			animation: dotmove $animation-speed infinite alternate-reverse;
+		}
+
+		.dot:nth-of-type(4) {
+			top: 100%;
+			right: 0;
+			animation: dotmove $animation-speed infinite alternate-reverse;
+			animation-delay: $animation-speed / 2;
+		}
+
+		.dot {
+			width: 0px;
+			height: 0px;
+			border-width: $border-width;
+			border-style: solid;
+
+			border-radius: 100%;
+
+			transform: translateY(-50%);
+
+			animation-timing-function: ease-in-out;
+
+			&.red {
+				background: red;
+				border-color: red;
+			}
+
+			&.blue {
+				background: blue;
+				border-color: blue;
+			}
+		}
+	}
+
+	.text {
+		font-family: monospace;
+		font-size: 1.25rem;
+		margin-top: 1rem;
+
+		user-select: none;
+	}
+}

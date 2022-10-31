@@ -4,7 +4,6 @@ import useEventListener from '../../data/useEventListener';
 import {
 	DataContext,
 	MusicSheet,
-	ToneContext,
 	ThreeDotMenu,
 	MusicalElements,
 	NoteLengths,
@@ -19,12 +18,13 @@ import { ChordSwitcher } from '../controls/ChordSwitcher';
 import { FC, useContext, useRef, useState } from 'react';
 
 import styles from '../../styles/index.module.scss'
+import { FullscreenToggle } from '../controls/FullscreenToggle';
+import { AbcVisualParams } from 'abcjs';
 
 
 const Editor: FC<{}> = (props) => {
 	const dataContext = useContext(DataContext);
 
-	const [isFullscreen, setIsFullscreen] = useState(false);
 	const [sheetWidth, setSheetWidth] = useState(0);
 	const mainRef = useRef<HTMLDivElement | null>(null);
 	const editorRef = useRef<HTMLDivElement | null>(null);
@@ -36,24 +36,22 @@ const Editor: FC<{}> = (props) => {
 		[mainRef]
 	);
 
-	useEventListener(
-		editorRef.current,
-		'onfullscreenchange',
-		_ev => editorRef && setIsFullscreen(!!document.fullscreenElement),
-		[editorRef]
-	);
-
-	const toggleFullscreen = () => {
-		if (isFullscreen)
-			document.exitFullscreen().then(() => setIsFullscreen(false));
-		else
-			editorRef.current?.requestFullscreen({ navigationUI: 'auto' }).then(() => setIsFullscreen(true));
+	const SHEET_OPTIONS: AbcVisualParams = {
+		initialClef: true,
+		staffwidth: sheetWidth,
+		wrap: {
+			minSpacing: 1.5,
+			maxSpacing: 2,
+			preferredMeasuresPerLine: 4
+		},
+		/* clickListener: (abcelem, tuneNumber, classes, analysis, drag, mouseEvent) => console.log(abcelem, tuneNumber, classes, analysis, drag, mouseEvent), */
+		selectTypes: ["note"]
 	};
 
 	return dataContext.data.ready && <div ref={editorRef} className={styles.editor}>
 		<header>
 			<button onClick={v => window.open("?" + serializeDataContextData(dataContext.data))}>🔗</button>
-			<button onClick={toggleFullscreen}>⛶</button>
+			<FullscreenToggle editorRef={editorRef} />
 			<MusicControl />
 			<ThreeDotMenu />
 		</header>
@@ -64,15 +62,7 @@ const Editor: FC<{}> = (props) => {
 						&& dataContext.data.sheet.type == "diatonic"
 						&& abcFromDiatonicSheet(dataContext.data.sheet, 8))
 					|| ""
-				} options={{
-					initialClef: true,
-					staffwidth: sheetWidth,
-					wrap: {
-						minSpacing: 1.5,
-						maxSpacing: 2,
-						preferredMeasuresPerLine: 4
-					}
-				}} />
+				} options={SHEET_OPTIONS} />
 			</div>
 		</main>
 		<footer>
