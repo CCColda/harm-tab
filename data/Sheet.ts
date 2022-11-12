@@ -4,9 +4,9 @@ import { groupArray } from "./Array";
 import { FormatBend, FormatHole } from "./DiatonicHarmonica";
 import { ABCNoteToNumber } from "./MusicNote";
 
-export function abcFromDiatonicSheet(diatonicSheet: DataContext.BaseSheet & DataContext.DiatonicSheet, n: number) {
+export function abcFromDiatonicSheet(diatonicSheet: DataContext.BaseSheet & DataContext.DiatonicSheet, n: number, highlight?: number) {
 	const compiledSheet = groupArray(diatonicSheet.chords, n)
-		.map(group => {
+		.map((group, group_id) => {
 			const notes = group.map(
 				chord => {
 					switch (chord.type) {
@@ -19,6 +19,9 @@ export function abcFromDiatonicSheet(diatonicSheet: DataContext.BaseSheet & Data
 					}
 				}
 			);
+
+			if (highlight !== null && Math.floor(highlight / n) == group_id)
+				notes[highlight % n] = "!mark!" + notes[highlight % n];
 
 			const words = group.map(
 				chord => {

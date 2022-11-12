@@ -1,19 +1,34 @@
-import { Transport } from "../node_modules/tone/build/esm/index";
 import { AbcNoteDuration, ABCNoteDurationToToneDuration, ABCNoteToToneNote } from "./MusicNote";
 
-const Play = (Tone: typeof import("tone"), chords: string[][], durations: string[], timeMargin: number = 1) => {
+export type MusicPlayerData = {
+	chords: string[][],
+	durations: string[],
+	timeMargin?: number,
+	chordCallback?: (idx: number, chord: string[], duration: string) => void,
+};
+
+const Play = (Tone: typeof import("tone"), data: MusicPlayerData) => {
 	const synth = new Tone.PolySynth().toDestination();
 	synth.sync();
 
 	let time = 0;
+	let callbacks: any[] = [];
 
-	for (let i = 0; i < chords.length; ++i) {
-		if (!durations[i]) continue;
+	for (let i = 0; i < data.chords.length; ++i) {
+		if (data.chordCallback)
+			callbacks.push(
+				Tone.getContext().setTimeout(
+					() => data.chordCallback(i, data.chords[i], data.durations[i]),
+					time
+				)
+			);
 
-		const dur = ABCNoteDurationToToneDuration(durations[i] as AbcNoteDuration); /* TODO */
+		if (!data.durations[i]) continue;
 
-		if (!chords[i].includes("z")) {
-			const notes = chords[i].map(v => ABCNoteToToneNote(v)).filter(v => !!v);
+		const dur = ABCNoteDurationToToneDuration(data.durations[i] as AbcNoteDuration); /* TODO */
+
+		if (!data.chords[i].includes("z")) {
+			const notes = data.chords[i].map(v => ABCNoteToToneNote(v)).filter(v => !!v);
 
 			synth.triggerAttackRelease(
 				notes,
@@ -25,7 +40,7 @@ const Play = (Tone: typeof import("tone"), chords: string[][], durations: string
 		time = time + Tone.Time(dur).toSeconds();
 	}
 
-	time = time + timeMargin;
+	time = time + (data.timeMargin ?? 1);
 
 	let timeout: number;
 	let resolve: (success: boolean) => void = null;
@@ -46,6 +61,9 @@ const Play = (Tone: typeof import("tone"), chords: string[][], durations: string
 		stop: () => {
 			if (timeout)
 				Tone.getContext().clearTimeout(timeout);
+
+			for (const callback of callbacks)
+				Tone.getContext().clearTimeout(callback);
 
 			synth.disconnect();
 			synth.dispose();

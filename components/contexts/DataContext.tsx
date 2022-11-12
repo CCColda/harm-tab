@@ -11,6 +11,7 @@ export type DataContextValue = {
 		setSheet: (newSheet: DCT.Sheet) => void,
 		setLayout: (newLayout: string) => void,
 		setMode: (newMode: "chord" | "note") => void,
+		setHighlightedChord: (newHighlightedChord: number | null) => void,
 	}
 };
 
@@ -21,6 +22,7 @@ export const DataContext = createContext<DataContextValue>({
 		setSheet: () => { },
 		setLayout: () => { },
 		setMode: () => { },
+		setHighlightedChord: () => { },
 	},
 });
 
@@ -41,6 +43,7 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string, pre
 							mode: "note",
 							layouts: LoadHarmonicaLayouts(t),
 							noteLength: "8",
+							highlightedChord: null,
 							sheet: {
 								type: "unset",
 								title: "",
@@ -59,6 +62,7 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string, pre
 			setSheet: newSheet => data.ready && setData({ ...data, sheet: newSheet }),
 			setLayout: newLayout => data.ready && setData({ ...data, sheet: { ...data.sheet, layout: newLayout } }),
 			setMode: newMode => data.ready && setData({ ...data, mode: newMode }),
+			setHighlightedChord: newHighlightedChord => data.ready && setData({ ...data, highlightedChord: newHighlightedChord }),
 		}
 	}
 

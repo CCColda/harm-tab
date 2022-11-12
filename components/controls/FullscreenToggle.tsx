@@ -15,11 +15,16 @@ const FullscreenToggle: React.FC<FullscreenToggleProps> = ({ editorRef }) => {
 		[editorRef]
 	);
 
-	const toggleFullscreen = () => {
-		if (isFullscreen)
-			document.exitFullscreen().then(() => setIsFullscreen(false));
-		else
-			editorRef.current?.requestFullscreen({ navigationUI: 'auto' }).then(() => setIsFullscreen(true));
+	const toggleFullscreen = async () => {
+		if (isFullscreen && document.fullscreenElement) {
+			await document.exitFullscreen();
+
+			setIsFullscreen(false);
+		}
+		else {
+			await editorRef.current?.requestFullscreen({ navigationUI: 'auto' });
+			setIsFullscreen(true);
+		}
 	};
 
 	return <button onClick={toggleFullscreen}>⛶</button>;

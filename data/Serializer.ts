@@ -124,6 +124,7 @@ export function parseDataContextData(dataString: string): DataContext.Data {
 						}
 					],
 					noteLength: "8",
+					highlightedChord: null,
 					sheet: {
 						type: "diatonic",
 						title: sheetSegment[0],
@@ -144,10 +145,14 @@ export function parseDataContextData(dataString: string): DataContext.Data {
 							else {
 								const notes = chord.slice(0, 1).split(LAYOUT_NOTE_SEPARATOR);
 
+								console.dir(notes);
+
 								return {
 									type: "chord",
 									notes: notes.map(note => {
 										const parsed = parseDiaHarmPos(note);
+
+										console.log("Searching for " + JSON.stringify(parsed) + " (" + note + ")")
 
 										return {
 											...parsed,

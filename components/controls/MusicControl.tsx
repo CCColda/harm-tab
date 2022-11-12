@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { FC, useContext, useState } from "react";
-import { Play } from "../../data/MusicPlayer";
+import { MusicPlayerData, Play } from "../../data/MusicPlayer";
 
 import styles from "../../styles/MusicControl.module.scss";
 import { DataContext, ToneContext } from "../index";
@@ -8,7 +8,7 @@ import { DataContext, ToneContext } from "../index";
 const DEFAULT_CONTROLS =
     Object.freeze({ promise: null as Promise<boolean>, stop: (() => { }) as () => void });
 
-const MusicControl: FC<{}> = (props) => {
+const MusicControl: FC<{}> = _ => {
     const dataContext = useContext(DataContext);
     const Tone = useContext(ToneContext);
 
@@ -22,9 +22,8 @@ const MusicControl: FC<{}> = (props) => {
 
             setIsPlaying(true);
 
-            const newControls = Play(
-                Tone,
-                dataContext.data.sheet.chords.map(chord => {
+            const musicData: MusicPlayerData = {
+                chords: dataContext.data.sheet.chords.map(chord => {
                     switch (chord.type) {
                         case "bar":
                             return [];
@@ -34,11 +33,15 @@ const MusicControl: FC<{}> = (props) => {
                             return chord.notes.map(v => v.note);
                     }
                 }),
-                dataContext.data.sheet.chords.map(v => v.type == "bar" ? "" : v.duration)
-            );
+                durations: dataContext.data.sheet.chords.map(v => v.type == "bar" ? "" : v.duration),
+                chordCallback: idx => dataContext.fn.setHighlightedChord(idx)
+            };
+
+            const newControls = Play(Tone, musicData);
 
             newControls.promise?.then(v => {
-                setIsPlaying(false)
+                setIsPlaying(false);
+                dataContext.fn.setHighlightedChord(null);
             });
 
             setControls(newControls);
@@ -48,8 +51,8 @@ const MusicControl: FC<{}> = (props) => {
     return <div
         className={styles.musicControl + (isPlaying ? " " + styles.playing : "")}
     >
-        <button className={styles.play} onClick={_ => { setIsPlaying(true); startPlaying() }}></button>
-        <button className={styles.stop} onClick={_ => { setIsPlaying(false); controls.stop() }}></button>
+        <button className={styles.play} onClick={_ => { if (Tone) { setIsPlaying(true); startPlaying(); } }}></button>
+        <button className={styles.stop} onClick={_ => { if (Tone) { setIsPlaying(false); controls.stop(); } }}></button>
     </div>;
 }
 

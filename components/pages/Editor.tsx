@@ -60,7 +60,7 @@ const Editor: FC<{}> = (props) => {
 				<MusicSheet abc={
 					(dataContext.data.ready
 						&& dataContext.data.sheet.type == "diatonic"
-						&& abcFromDiatonicSheet(dataContext.data.sheet, 8))
+						&& abcFromDiatonicSheet(dataContext.data.sheet, 8, dataContext.data.highlightedChord))
 					|| ""
 				} options={SHEET_OPTIONS} />
 			</div>

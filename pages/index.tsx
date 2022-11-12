@@ -10,16 +10,13 @@ import { parseDataContextData } from '../data/Serializer';
 export default function Home() {
   const router = useRouter();
 
-  const x = router.asPath.slice(router.asPath.indexOf('?') + 1);
-
-  console.log(x)
-  const parsedLayout = parseDataContextData(x);
+  const parsedLayout = parseDataContextData(router.asPath.slice(router.asPath.indexOf('?') + 1));
 
   return <>
     <Head>
       <title>Harm-tab</title>
     </Head>
-    <ToneProvider fallback={<Loading />}>
+    <ToneProvider>
       <DataContextProvider layoutPath='layouts.json' preparsedData={parsedLayout}>
 
         <LayoutFallback fallback={<LayoutChooser />}>
