@@ -1,0 +1,39 @@
+.noteComponent {
+	width: fit-content;
+
+	.notePlaceholder {
+		user-select: none;
+
+		display: inline-block;
+
+		text-align: center;
+
+		&::before {
+			content: '1';
+			user-select: none;
+			display: block;
+
+			text-align: center;
+
+			border-bottom: 1px solid white;
+		}
+	}
+
+	.note {
+		display: inline-block;
+
+		width: 2rem;
+		height: 2rem;
+
+		background-size: contain;
+	}
+
+	.dot {
+		display: inline-block;
+		width: 0.25rem;
+		height: 0.25rem;
+		background-color: white;
+		border-radius: 100%;
+		margin-left: -0.5rem;
+	}
+}

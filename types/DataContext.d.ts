@@ -24,6 +24,7 @@ export namespace DataContext {
 		noteLength: string,
 		mode: "chord" | "note",
 		highlightedChord: number | null,
+		selectedChord: number | null,
 
 		layouts: HarmLayout[],
 		sheet: Sheet;

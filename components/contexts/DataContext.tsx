@@ -12,6 +12,7 @@ export type DataContextValue = {
 		setLayout: (newLayout: string) => void,
 		setMode: (newMode: "chord" | "note") => void,
 		setHighlightedChord: (newHighlightedChord: number | null) => void,
+		setSelectedChord: (newSelectedChord: number | null) => void,
 	}
 };
 
@@ -23,6 +24,7 @@ export const DataContext = createContext<DataContextValue>({
 		setLayout: () => { },
 		setMode: () => { },
 		setHighlightedChord: () => { },
+		setSelectedChord: () => { },
 	},
 });
 
@@ -43,6 +45,7 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string, pre
 							mode: "note",
 							layouts: LoadHarmonicaLayouts(t),
 							noteLength: "8",
+							selectedChord: null,
 							highlightedChord: null,
 							sheet: {
 								type: "unset",
@@ -63,6 +66,7 @@ export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string, pre
 			setLayout: newLayout => data.ready && setData({ ...data, sheet: { ...data.sheet, layout: newLayout } }),
 			setMode: newMode => data.ready && setData({ ...data, mode: newMode }),
 			setHighlightedChord: newHighlightedChord => data.ready && setData({ ...data, highlightedChord: newHighlightedChord }),
+			setSelectedChord: newSelectedChord => data.ready && setData({ ...data, selectedChord: newSelectedChord }),
 		}
 	}
 

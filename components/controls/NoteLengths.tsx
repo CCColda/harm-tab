@@ -2,6 +2,7 @@ import { FC, useContext } from 'react';
 import { DataContext } from '../contexts/DataContext';
 
 import styles from '../../styles/NoteLengths.module.scss';
+import { Note, NoteDisplayDuration } from './Note';
 
 export type NoteLengthsProps = {
 
@@ -37,8 +38,10 @@ const NoteLengths: FC<NoteLengthsProps> = (props) => {
 						<label key={i}>
 							<input type="radio" name="notelength" value={`${v.value}`} defaultChecked={v.default ?? false} />
 							<div>
+								<Note duration={64 / v.value as NoteDisplayDuration} />
+								{/* 
 								<span>{v.symbol}</span>
-								<span>{v.display}</span>
+								<span>{v.display}</span> */}
 							</div>
 						</label>
 					)

@@ -125,6 +125,7 @@ export function parseDataContextData(dataString: string): DataContext.Data {
 					],
 					noteLength: "8",
 					highlightedChord: null,
+					selectedChord: null,
 					sheet: {
 						type: "diatonic",
 						title: sheetSegment[0],

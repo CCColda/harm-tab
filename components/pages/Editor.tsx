@@ -12,14 +12,15 @@ import {
 } from '../index';
 
 import { serializeDataContextData } from '../../data/Serializer';
-import { abcFromDiatonicSheet, addDiatonicNote, extendDiatonicChord } from '../../data/Sheet';
+import { DiatonicSheet } from '../../data/Sheet';
 import { DataContext as DCT } from '../../types/DataContext';
 import { ChordSwitcher } from '../controls/ChordSwitcher';
-import { FC, useContext, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 
 import styles from '../../styles/index.module.scss'
 import { FullscreenToggle } from '../controls/FullscreenToggle';
 import { AbcVisualParams } from 'abcjs';
+import { Note } from '../controls/Note';
 
 
 const Editor: FC<{}> = (props) => {
@@ -36,6 +37,11 @@ const Editor: FC<{}> = (props) => {
 		[mainRef]
 	);
 
+	if (dataContext.data.ready && dataContext.data.sheet.type == "diatonic")
+		useEffect(() => {
+			dataContext.fn.setSelectedChord(null);
+		}, [dataContext.data.sheet.chords]);
+
 	const SHEET_OPTIONS: AbcVisualParams = {
 		initialClef: true,
 		staffwidth: sheetWidth,
@@ -44,7 +50,16 @@ const Editor: FC<{}> = (props) => {
 			maxSpacing: 2,
 			preferredMeasuresPerLine: 4
 		},
-		/* clickListener: (abcelem, tuneNumber, classes, analysis, drag, mouseEvent) => console.log(abcelem, tuneNumber, classes, analysis, drag, mouseEvent), */
+		clickListener: (_abcelem, _tuneNumber, _classes, _analysis, drag, _mouseEvent) => {
+			if (dataContext.data.ready && dataContext.data.sheet.type == "diatonic") {
+				const chordIdx = dataContext.data.sheet.chords
+					.map((v, i) => ({ v, i }))
+					.filter(({ v }) => ["chord", "silence"].includes(v.type))
+					?.[drag.index]?.i;
+
+				dataContext.fn.setSelectedChord(chordIdx);
+			}
+		},
 		selectTypes: ["note"]
 	};
 
@@ -60,7 +75,7 @@ const Editor: FC<{}> = (props) => {
 				<MusicSheet abc={
 					(dataContext.data.ready
 						&& dataContext.data.sheet.type == "diatonic"
-						&& abcFromDiatonicSheet(dataContext.data.sheet, 8, dataContext.data.highlightedChord))
+						&& DiatonicSheet.toABC(dataContext.data.sheet, 8, [dataContext.data.highlightedChord, dataContext.data.selectedChord].filter(v => !!v)))
 					|| ""
 				} options={SHEET_OPTIONS} />
 			</div>
@@ -72,9 +87,9 @@ const Editor: FC<{}> = (props) => {
 					onSelectSound={x => dataContext.data.ready && dataContext.fn.setSheet(
 						dataContext.data.mode == "note"
 							?
-							addDiatonicNote(dataContext.data.sheet as DCT.BaseSheet & DCT.DiatonicSheet, [x], dataContext.data.noteLength)
+							DiatonicSheet.addNote(dataContext.data.sheet as DCT.BaseSheet & DCT.DiatonicSheet, [x], dataContext.data.noteLength, dataContext.data.selectedChord)
 							:
-							extendDiatonicChord(dataContext.data.sheet as DCT.BaseSheet & DCT.DiatonicSheet, [x], dataContext.data.noteLength)
+							DiatonicSheet.extendChord(dataContext.data.sheet as DCT.BaseSheet & DCT.DiatonicSheet, [x], dataContext.data.noteLength, dataContext.data.selectedChord)
 					)}
 				/>
 			</span>
