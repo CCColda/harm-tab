@@ -1,0 +1,8 @@
+@import './Editor.colors.scss';
+
+.sheetWrapper {
+	margin-left: 2rem;
+	margin-right: 2rem;
+
+	color: var(--sheet-color);
+}

@@ -1,28 +1,30 @@
 import Head from 'next/head'
-import React from 'react';
+import React, { } from 'react';
+
+import { ToneProvider } from '../components/contexts/ToneContext';
+import { DataContextProvider } from '../components/contexts/DataContext';
 
 import { LayoutChooser } from '../components/pages/LayoutChooser';
-import { DataContextProvider, LayoutFallback, Loading, ToneProvider } from '../components/index';
 import { Editor } from '../components/pages/Editor';
-import { useRouter } from '../node_modules/next/router';
-import { parseDataContextData } from '../data/Serializer';
+import { LayoutFallback } from '../components/controls/LayoutFallback';
+import { URLSuspense } from '../components/controls/URLSuspense';
+import { LayoutSuspense } from '../components/controls/LayoutSuspense';
 
 export default function Home() {
-  const router = useRouter();
-
-  const parsedLayout = parseDataContextData(router.asPath.slice(router.asPath.indexOf('?') + 1));
-
   return <>
     <Head>
       <title>Harm-tab</title>
     </Head>
     <ToneProvider>
-      <DataContextProvider layoutPath='layouts.json' preparsedData={parsedLayout}>
+      <DataContextProvider>
+        <URLSuspense>
+          <LayoutSuspense layoutPath='layouts.json'>
+            <LayoutFallback fallback={<LayoutChooser />}>
+              <Editor />
+            </LayoutFallback>
 
-        <LayoutFallback fallback={<LayoutChooser />}>
-          <Editor />
-        </LayoutFallback>
-
+          </LayoutSuspense>
+        </URLSuspense>
       </DataContextProvider>
     </ToneProvider>
   </>

@@ -1,4 +1,4 @@
-@import './index.colors.scss';
+@import './Editor.colors.scss';
 
 $phone-screen: 768px;
 
@@ -43,13 +43,6 @@ $phone-screen: 768px;
 		overflow-y: auto;
 		scroll-behavior: smooth;
 		width: 100%;
-
-		.sheetWrapper {
-			margin-left: 2rem;
-			margin-right: 2rem;
-
-			color: var(--sheet-color);
-		}
 	}
 
 	footer {
@@ -62,12 +55,6 @@ $phone-screen: 768px;
 
 		margin-left: auto;
 		margin-right: auto;
-
-		.harmonicaWrapper {
-			max-width: calc(min(100%, 80rem));
-			margin-left: auto;
-			margin-right: auto;
-		}
 
 		.music {
 			display: flex;

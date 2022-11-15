@@ -1,46 +1,68 @@
 import { FC, useContext } from 'react';
+
 import { DataContext } from '../contexts/DataContext';
 
-import styles from '../../styles/MusicalElements.module.scss';
 import { DiatonicSheet } from '../../data/Sheet';
 
-const MusicalElements: FC<{}> = (_props) => {
+import styles from '../../styles/MusicalElements.module.scss';
+
+export type MusicalElementsProps = {
+	// TODO
+	onAdd?: (type: "bar" | "silence") => void,
+	onRemove?: () => void,
+}
+
+const MusicalElements: FC<MusicalElementsProps> = (props) => {
 	const dataContext = useContext(DataContext);
 
 	const onErase = _ => {
-		if (dataContext.data.ready && dataContext.data.sheet.type == "diatonic") {
-			const deleteIdx = dataContext.data.selectedChord ?? dataContext.data.sheet.chords.length - 1;
+		if (dataContext.data.saved.sheet.type == "diatonic") {
+			const deleteIdx = dataContext.data.memory.selectedIndex ?? dataContext.data.saved.sheet.chords.length - 1;
 
-			dataContext.fn.setSheet({
-				...dataContext.data.sheet,
-				chords: [
-					...dataContext.data.sheet.chords.slice(0, deleteIdx),
-					...dataContext.data.sheet.chords.slice(deleteIdx + 1)
-				]
-			})
+			dataContext.fn.saved.modifySheet(sheet => (
+				sheet.type == "diatonic"
+					? {
+						...sheet,
+						chords: [
+							...sheet.chords.slice(0, deleteIdx),
+							...sheet.chords.slice(deleteIdx + 1)
+						]
+					}
+					: sheet
+			));
+
+			props.onRemove && props.onRemove();
 		}
 	};
 
-	return <div className={`${styles.musicalElements}`}>
+	const onAddSilence = _ => {
+		if (dataContext.data.saved.sheet.type == "diatonic") {
+			dataContext.fn.saved.modifySheet(
+				sheet => sheet.type == "diatonic"
+					? DiatonicSheet.addSilence(sheet, dataContext.data.memory.insert.duration, dataContext.data.memory.selectedIndex)
+					: sheet
+			)
+
+			props.onAdd && props.onAdd("silence");
+		}
+	}
+
+	const onAddBar = _ => {
+		if (dataContext.data.saved.sheet.type == "diatonic") {
+			dataContext.fn.saved.modifySheet(
+				sheet => sheet.type == "diatonic"
+					? DiatonicSheet.addBar(sheet, dataContext.data.memory.selectedIndex)
+					: sheet
+			)
+
+			props.onAdd && props.onAdd("bar");
+		}
+	}
+
+	return <div className={styles.musicalElements}>
 		<button onClick={onErase}>⇤</button>
-
-		{/* dataContext.data.ready
-		&& dataContext.data.sheet.type == "diatonic"
-		&& dataContext.data.sheet.notes.push({
-			dir: "in", duration: dataContext.data.noteLength,
-		note: "z", position: 0
-			}) */}
-
-		<button onClick={_ => dataContext.data.ready
-			&& dataContext.data.sheet.type == "diatonic"
-			&& dataContext.fn.setSheet(
-				DiatonicSheet.addSilence(dataContext.data.sheet, dataContext.data.noteLength, dataContext.data.selectedChord)
-			)}>𝄽</button>
-		<button onClick={_ => dataContext.data.ready
-			&& dataContext.data.sheet.type == "diatonic"
-			&& dataContext.fn.setSheet(
-				DiatonicSheet.addBar(dataContext.data.sheet, dataContext.data.selectedChord)
-			)}>|</button>
+		<button onClick={onAddSilence}>𝄽</button>
+		<button onClick={onAddBar}>|</button>
 	</div>
 };
 

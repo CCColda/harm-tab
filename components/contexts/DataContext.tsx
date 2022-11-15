@@ -1,76 +1,24 @@
-import React, { createContext, FC, PropsWithChildren, useEffect, useState } from "react";
-import { DataContext as DCT } from "../../types/DataContext";
-import { LoadHarmonicaLayouts } from "../../data/Harmonica";
-import { HarmLayout } from "../../types/Harmonica";
+import { Data } from "../../types/Data";
+import { DataFN, DefaultData } from "../../data/Data";
+import { createContext, PropsWithChildren, useState } from "react";
 
-export type DataContextValue = {
-	data: DCT.Data,
-
-	fn: {
-		setNoteLength: (newLength: string) => void,
-		setSheet: (newSheet: DCT.Sheet) => void,
-		setLayout: (newLayout: string) => void,
-		setMode: (newMode: "chord" | "note") => void,
-		setHighlightedChord: (newHighlightedChord: number | null) => void,
-		setSelectedChord: (newSelectedChord: number | null) => void,
-	}
-};
+type DataContextValue = {
+	data: Data,
+	fn: ReturnType<typeof DataFN>,
+}
 
 export const DataContext = createContext<DataContextValue>({
-	data: { ready: false },
-	fn: {
-		setNoteLength: () => { },
-		setSheet: () => { },
-		setLayout: () => { },
-		setMode: () => { },
-		setHighlightedChord: () => { },
-		setSelectedChord: () => { },
-	},
+	data: DefaultData,
+	fn: DataFN({ setMemory: x => x, setSaved: x => x }),
 });
 
-export const DataContextProvider: FC<PropsWithChildren<{ layoutPath: string, preparsedData: DCT.Data }>> = (props) => {
-	const [data, setData] = useState<DCT.Data>(
-		props.preparsedData.ready ? props.preparsedData : { ready: false }
-	);
+export const DataContextProvider: React.FC<PropsWithChildren<{}>> = props => {
+	const [memory, setMemory] = useState(DefaultData.memory);
+	const [saved, setSaved] = useState(DefaultData.saved);
 
-	useEffect(() => {
-		if (!data.ready)
-			fetch(props.layoutPath, { method: "GET", headers: { "Accept": "application/json" } })
-				.then(d => d.status == 200 ? d.text() : "")
-				.then(t => {
-					if (t)
-						setData(oldData => ({
-							...oldData,
-							ready: true,
-							mode: "note",
-							layouts: LoadHarmonicaLayouts(t),
-							noteLength: "8",
-							selectedChord: null,
-							highlightedChord: null,
-							sheet: {
-								type: "unset",
-								title: "",
-								key: "",
-								layout: "",
-								meter: "",
-							}
-						}));
-				});
-	}, [props.layoutPath, props.preparsedData, data.ready]);
+	const fn = DataFN({ setMemory, setSaved });
 
-	const providedValue: DataContextValue = {
-		data,
-		fn: {
-			setNoteLength: newNoteLength => data.ready && setData({ ...data, noteLength: newNoteLength }),
-			setSheet: newSheet => data.ready && setData({ ...data, sheet: newSheet }),
-			setLayout: newLayout => data.ready && setData({ ...data, sheet: { ...data.sheet, layout: newLayout } }),
-			setMode: newMode => data.ready && setData({ ...data, mode: newMode }),
-			setHighlightedChord: newHighlightedChord => data.ready && setData({ ...data, highlightedChord: newHighlightedChord }),
-			setSelectedChord: newSelectedChord => data.ready && setData({ ...data, selectedChord: newSelectedChord }),
-		}
-	}
-
-	return <DataContext.Provider value={providedValue}>
+	return <DataContext.Provider value={{ data: { memory, saved }, fn }}>
 		{props.children}
 	</DataContext.Provider>
-};
+}

@@ -1,6 +1,7 @@
-import { DiaHarm } from "./Harmonica";
+import { DiaHarm, HarmLayout } from "./Harmonica"
+import { NoteDuration } from "./MusicNote";
 
-export namespace DataContext {
+export namespace DataSheets {
 	export type BaseSheet = {
 		layout: string,
 		meter: string,
@@ -18,17 +19,19 @@ export namespace DataContext {
 	} | {
 		type: "unset"
 	});
+}
 
-	export type Data = {
-		ready: true,
-		noteLength: string,
-		mode: "chord" | "note",
-		highlightedChord: number | null,
-		selectedChord: number | null,
-
+export interface Data {
+	memory: {
+		insert: {
+			duration: NoteDuration,
+			mode: "chord" | "note"
+		},
+		highlightedIndex: number | null,
+		selectedIndex: number | null,
 		layouts: HarmLayout[],
-		sheet: Sheet;
-	} | {
-		ready: false
-	};
+	},
+	saved: {
+		sheet: DataSheets.Sheet
+	}
 }

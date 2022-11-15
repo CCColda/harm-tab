@@ -10,16 +10,16 @@ const ChordSwitcher: FC<{}> = (_props) => {
 		className={styles.chordSwitcher}>
 		<button
 			className={
-				styles.note + (dataContext.data.ready && dataContext.data.mode == "note" ? " " + styles.active : "")
+				styles.note + (dataContext.data.memory.insert.mode == "note" ? " " + styles.active : "")
 			}
-			onClick={_ => dataContext.fn.setMode("note")}>
+			onClick={_ => dataContext.fn.memory.insert.setMode("note")}>
 			+
 		</button>
 		<button
 			className={
-				styles.chord + (dataContext.data.ready && dataContext.data.mode == "chord" ? " " + styles.active : "")
+				styles.chord + (dataContext.data.memory.insert.mode == "chord" ? " " + styles.active : "")
 			}
-			onClick={_ => dataContext.fn.setMode("chord")}>
+			onClick={_ => dataContext.fn.memory.insert.setMode("chord")}>
 			𝅘𝅥+
 		</button>
 	</div>;

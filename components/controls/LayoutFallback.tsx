@@ -1,13 +1,13 @@
 import { ReactNode, useContext } from "react";
-import { DataContext } from "../index";
+import { DataContext } from "../contexts/DataContext";
 
 const LayoutFallback: React.FC<React.PropsWithChildren<{ fallback: ReactNode }>> = (props) => {
 	const dataContext = useContext(DataContext);
 
-	const layoutReady = dataContext.data.ready
-		&& dataContext.data.sheet.type != "unset"
-		&& dataContext.data.layouts.some(
-			v => v.label == (dataContext.data.ready && dataContext.data.sheet.layout)
+	const layoutReady =
+		dataContext.data.saved.sheet.type != "unset"
+		&& dataContext.data.memory.layouts.some(
+			v => v.label == (dataContext.data.saved.sheet.layout)
 		);
 
 	return <>

@@ -1,8 +1,10 @@
-import { FC, useContext } from 'react';
-import { DataContext } from '../contexts/DataContext';
+import { FC, FormEventHandler, useContext } from 'react';
+
+import { Note, NoteDisplayDuration } from './Note';
 
 import styles from '../../styles/NoteLengths.module.scss';
-import { Note, NoteDisplayDuration } from './Note';
+import { DataContext } from '../contexts/DataContext';
+import { NoteDuration } from '../../data/MusicNote';
 
 export type NoteLengthsProps = {
 
@@ -24,6 +26,13 @@ const NOTES = Object.freeze([
 const NoteLengths: FC<NoteLengthsProps> = (props) => {
 	const dataContext = useContext(DataContext);
 
+
+	const onChange: FormEventHandler<HTMLDivElement> = ev =>
+		dataContext.fn.memory.insert.setDuration(
+			Number((ev.target as HTMLInputElement).value) as NoteDuration
+		);
+
+
 	return <label className={styles.notelengths}>
 		<input type="checkbox" />
 		<span className={styles.togglePanel}>
@@ -31,7 +40,7 @@ const NoteLengths: FC<NoteLengthsProps> = (props) => {
 			<span className={styles.toggle}></span>
 			<div
 				className={styles.list}
-				onChange={ev => dataContext.fn.setNoteLength((ev.target as HTMLInputElement).value)}
+				onChange={onChange}
 			>
 				{
 					NOTES.map((v, i) =>
@@ -39,9 +48,6 @@ const NoteLengths: FC<NoteLengthsProps> = (props) => {
 							<input type="radio" name="notelength" value={`${v.value}`} defaultChecked={v.default ?? false} />
 							<div>
 								<Note duration={64 / v.value as NoteDisplayDuration} />
-								{/* 
-								<span>{v.symbol}</span>
-								<span>{v.display}</span> */}
 							</div>
 						</label>
 					)

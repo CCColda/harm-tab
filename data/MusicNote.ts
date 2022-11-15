@@ -5,24 +5,24 @@ export type AbcNoteDuration = `${NoteDuration | DottedNoteDuration}`;
 
 export type Note = "C" | "D" | "E" | "F" | "G" | "A" | "B";
 export type Octave = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-export type AbcNote = "z" | `${"=" | "_" | ""}${Note | Lowercase<Note>}${"," | "'" | ",," | "''" | ",,," | "'''" | ""}`
+export type AbcNote = "z" | `${"^" | "_" | ""}${Note | Lowercase<Note>}${"," | "'" | ",," | "''" | ",,," | "'''" | ""}`
 export type ToneNote = `${Note}${"#" | "b" | ""}${Octave | ""}`
 
 const ABC_NOTE_SCORES = Object.freeze({
 	[0]: ["C"],
-	[0.5]: ["=C", "_D"],
+	[0.5]: ["^C", "_D"],
 	[1]: ["D"],
-	[1.5]: ["=D", "_E"],
+	[1.5]: ["^D", "_E"],
 	[2]: ["E"],
-	[2.5]: ["=E", "_F"],
+	[2.5]: ["^E", "_F"],
 	[3]: ["F"],
-	[3.5]: ["=F", "_G"],
+	[3.5]: ["^F", "_G"],
 	[4]: ["G"],
-	[4.5]: ["=G", "_A"],
+	[4.5]: ["^G", "_A"],
 	[5]: ["A"],
-	[5.5]: ["=A", "_B"],
+	[5.5]: ["^A", "_B"],
 	[6]: ["B"],
-	[6.5]: ["=B", "_C"],
+	[6.5]: ["^B", "_C"],
 });
 
 const TONE_NOTE_SCORES = Object.freeze({
@@ -58,7 +58,7 @@ const l_calculateNodeModifier = (note: string) =>
 const ABCNoteToNumber = (note: string) => {
 	const modifier = l_calculateNodeModifier(note);
 
-	const match = note.toUpperCase().match(/[=_]?[CDEFGAB]/);
+	const match = note.toUpperCase().match(/[\^_]?[CDEFGAB]/);
 	if (!match)
 		return -1;
 
@@ -68,10 +68,10 @@ const ABCNoteToNumber = (note: string) => {
 
 const FormatABCNote = (note: string): string => {
 	const isFlat = !!note.match(/_[cdefgab].*/i);
-	const isSharp = !!note.match(/=[cdefgab].*/i);
+	const isSharp = !!note.match(/\^[cdefgab].*/i);
 
 	const modifier = l_calculateNodeModifier(note);
-	const letterMatch = note.match(/[_=]?([cdefgab]).*/i);
+	const letterMatch = note.match(/[\^_]?([cdefgab]).*/i);
 
 	if (!letterMatch || !letterMatch[1])
 		return note;
@@ -82,7 +82,7 @@ const FormatABCNote = (note: string): string => {
 const ABCNoteToToneNote = (note: string): string => {
 	const modifier = l_calculateNodeModifier(note);
 
-	const match = note.toUpperCase().match(/[=_]?[CDEFGAB]/);
+	const match = note.toUpperCase().match(/[\^_]?[CDEFGAB]/);
 	if (!match)
 		return "";
 

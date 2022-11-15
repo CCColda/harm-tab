@@ -50,5 +50,6 @@ export type HarmLayout = ({
 } | {
 	type: "chromatic"
 }) & {
-	label: string
+	label: string,
+	key: string,
 };

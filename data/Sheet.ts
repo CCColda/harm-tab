@@ -1,13 +1,13 @@
-import { DataContext } from "../types/DataContext";
+import { DataSheets } from "../types/Data";
 import { DiaHarm } from "../types/Harmonica";
 import { groupArray } from "./Array";
 import { FormatBend, FormatHole } from "./DiatonicHarmonica";
 import { ABCNoteToNumber } from "./MusicNote";
 
 export const DiatonicSheet = (() => {
-	type DiatonicSheetType = DataContext.BaseSheet & DataContext.DiatonicSheet;
+	type TDiaHarmSheet = DataSheets.BaseSheet & DataSheets.DiatonicSheet;
 
-	const addChord = (sheet: DiatonicSheetType, chord: (typeof sheet)["chords"], idx?: number): typeof sheet => {
+	const addChord = (sheet: TDiaHarmSheet, chord: (typeof sheet)["chords"], idx?: number): TDiaHarmSheet => {
 		const
 			chordsBeforeIdx = sheet.chords.slice(0, (idx ?? sheet.chords.length) + 1),
 			chordsAfterIdx = sheet.chords.slice((idx ?? sheet.chords.length) + 1);
@@ -18,7 +18,7 @@ export const DiatonicSheet = (() => {
 		};
 	}
 
-	const toABC = (diatonicSheet: DiatonicSheetType, n: number, highlights: number[] = []) => {
+	const toABC = (diatonicSheet: TDiaHarmSheet, n: number, highlights: number[] = []) => {
 		const compiledSheet = groupArray(diatonicSheet.chords, n)
 			.map((group, group_id) => {
 				const notes = group.map(
@@ -67,16 +67,16 @@ export const DiatonicSheet = (() => {
 		].join("\n");
 	}
 
-	const addNote = (sheet: DiatonicSheetType, notes: DiaHarm.SoundPosition[], duration: string, idx?: number) =>
+	const addNote = (sheet: TDiaHarmSheet, notes: DiaHarm.SoundPosition[], duration: string, idx?: number) =>
 		addChord(sheet, [{ type: "chord", notes, duration }], idx);
 
-	const addSilence = (sheet: DiatonicSheetType, duration: string, idx?: number) =>
+	const addSilence = (sheet: TDiaHarmSheet, duration: string, idx?: number) =>
 		addChord(sheet, [{ type: "silence", duration }], idx);
 
-	const addBar = (sheet: DiatonicSheetType, idx?: number) =>
+	const addBar = (sheet: TDiaHarmSheet, idx?: number) =>
 		addChord(sheet, [{ type: "bar" }], idx);
 
-	const extendChord = (sheet: DiatonicSheetType, notes: DiaHarm.SoundPosition[], fallbackDuration: string, idx?: number): typeof sheet => {
+	const extendChord = (sheet: TDiaHarmSheet, notes: DiaHarm.SoundPosition[], fallbackDuration: string, idx?: number): TDiaHarmSheet => {
 		const chordAtIdx = sheet.chords[idx ?? (sheet.chords.length - 1)];
 		const
 			chordsBeforeIdx = sheet.chords.slice(0, (idx ?? sheet.chords.length) - 1),
