@@ -36,7 +36,7 @@ const NoteLengths: FC<NoteLengthsProps> = (props) => {
 	return <label className={styles.notelengths}>
 		<input type="checkbox" />
 		<span className={styles.togglePanel}>
-			<span className={styles.icon}>𝅘𝅥</span>
+			<span className={styles.icon}><Note duration={8} /></span>
 			<span className={styles.toggle}></span>
 			<div
 				className={styles.list}

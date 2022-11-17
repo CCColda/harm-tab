@@ -4,7 +4,7 @@ import { NoteDuration } from "./MusicNote";
 export namespace DataSheets {
 	export type BaseSheet = {
 		layout: string,
-		meter: string,
+		metre: string,
 		key: string,
 		title: string,
 	};

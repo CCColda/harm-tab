@@ -16,7 +16,7 @@ export const DefaultData = Object.freeze<Data>({
 			type: "unset",
 			layout: null,
 			key: "C",
-			meter: "4/4",
+			metre: "4/4",
 			title: "",
 		},
 	},

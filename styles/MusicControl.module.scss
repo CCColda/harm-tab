@@ -5,21 +5,16 @@ $lift-rate: 0.3rem;
 .musicControl {
     --musicbutton-foreground: white;
     --musicbutton-hover: #AAA;
-    --musicbutton-active: rgb(0, 201, 0);
+    --musicbutton-active: #57ff57;
+    --stopbutton-active: #a54f4f;
 
     button {
         display: inline-block;
 
         border: 0;
-        padding: .5rem;
         background: transparent;
 
-        border-bottom: 0.25rem solid var(--musicbutton-foreground);
-
         &:hover {
-            margin-bottom: $lift-rate;
-            padding-bottom: .5rem - $lift-rate;
-
             border-bottom-color: var(--musicbutton-hover);
         }
     }
@@ -46,9 +41,7 @@ $lift-rate: 0.3rem;
         }
 
         transition: $transition-speed border-color,
-        $transition-speed border-style,
-        $transition-speed margin-bottom,
-        $transition-speed padding-bottom;
+        $transition-speed border-style;
     }
 
     .stop {
@@ -66,37 +59,23 @@ $lift-rate: 0.3rem;
         }
 
         transition: $transition-speed border-color,
-        $transition-speed border-style,
-        $transition-speed margin-bottom,
-        $transition-speed padding-bottom;
+        $transition-speed border-style;
     }
 
 
     &.playing {
         >.play {
-            border-bottom-color: var(--musicbutton-active);
-
             &::before {
                 border-top-color: var(--musicbutton-active);
                 border-right-color: var(--musicbutton-active);
             }
         }
-
-        >.stop {
-            border-bottom-style: dashed;
-        }
     }
 
     &:not(.playing) {
-        &:not(.playing)>.play {
-            border-bottom-style: dashed;
-        }
-
         &:not(.playing)>.stop {
-            border-color: var(--musicbutton-active);
-
             &::before {
-                border-color: var(--musicbutton-active);
+                border-color: var(--stopbutton-active);
             }
         }
     }

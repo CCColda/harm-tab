@@ -60,7 +60,7 @@ export const DiatonicSheet = (() => {
 		return [
 			`X:1`,
 			`T:${diatonicSheet.title}`,
-			`M:${diatonicSheet.meter}`,
+			`M:${diatonicSheet.metre}`,
 			`L:1/64`,
 			`K:${diatonicSheet.key}`,
 			compiledSheet

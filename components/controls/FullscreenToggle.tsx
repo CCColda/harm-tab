@@ -1,6 +1,8 @@
 import { useState } from "react";
 import useEventListener from "../../data/useEventListener";
 
+import styles from "../../styles/FullscreenToggle.module.scss";
+
 type FullscreenToggleProps = {
 	editorRef: React.MutableRefObject<HTMLDivElement>,
 }
@@ -27,7 +29,7 @@ const FullscreenToggle: React.FC<FullscreenToggleProps> = ({ editorRef }) => {
 		}
 	};
 
-	return <button onClick={toggleFullscreen}>⛶</button>;
+	return <button onClick={toggleFullscreen} className={styles.fullscreenToggle}></button>;
 };
 
 export { FullscreenToggle };

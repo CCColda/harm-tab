@@ -1,0 +1,33 @@
+.metreField {
+	color: white;
+
+	font-family: 'Calibri', sans-serif;
+
+	.brief {
+		border-right: 1px solid white;
+		padding-right: 0.5rem;
+
+		user-select: none;
+	}
+
+	select {
+		color: white;
+
+		background: #fff2;
+		border: none;
+		outline: none;
+
+		border-radius: 5px;
+		padding: 0.5rem;
+
+		transition: 0.2s background;
+
+		option {
+			color: black;
+		}
+
+		&:focus {
+			background: #ddd2;
+		}
+	}
+}

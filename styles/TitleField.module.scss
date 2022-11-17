@@ -1,0 +1,31 @@
+.titleField {
+	color: white;
+
+	font-family: 'Calibri', sans-serif;
+
+	.brief {
+		border-right: 1px solid white;
+		padding-right: 0.5rem;
+
+		user-select: none;
+	}
+
+	input {
+		color: white;
+
+		background: #fff2;
+		border: none;
+		outline: none;
+
+		max-width: 15vw;
+
+		border-radius: 5px;
+		padding: 0.5rem;
+
+		transition: 0.2s background;
+
+		&:focus {
+			background: #ddd2;
+		}
+	}
+}

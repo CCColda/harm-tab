@@ -3,12 +3,12 @@ import styles from "../../styles/Note.module.scss";
 
 export type NoteDisplayDuration = NoteDuration | DottedNoteDuration;
 
-const AVAILABLE_NOTES: NoteDisplayDuration[] = [
+const AVAILABLE_NOTES = Object.freeze<NoteDisplayDuration[]>([
 	1, 2, 4, 8, 16, 32, 64
-];
+]);
 
 export const Note: React.FC<{ duration: NoteDisplayDuration }> = props => {
-	let displayNote: typeof AVAILABLE_NOTES[keyof typeof AVAILABLE_NOTES] = null;
+	let displayNote: NoteDisplayDuration | null = null;
 	let displayDot = false;
 
 	if (AVAILABLE_NOTES.includes(props.duration)) {

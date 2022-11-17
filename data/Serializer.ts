@@ -75,7 +75,7 @@ export function serializeDataContextData(data: Data): string | undefined {
 				layout.label,
 				layout.key,
 				serializeDiaHarmLayout(layout.layout),
-				[sheet.title, sheet.meter, sheet.key].join(LAYOUT_MINOR_SEPARATOR),
+				[sheet.title, sheet.metre, sheet.key].join(LAYOUT_MINOR_SEPARATOR),
 				sheet.chords.map(chord => {
 					switch (chord.type) {
 						case "bar":
@@ -133,7 +133,7 @@ export function parseDataContextData(dataString: string): Data {
 						sheet: {
 							type: "diatonic",
 							title: sheetSegment[0],
-							meter: sheetSegment[1],
+							metre: sheetSegment[1],
 							key: sheetSegment[2],
 							chords: positionsSegment.map(chord => {
 								if (chord.startsWith(BAR)) {
