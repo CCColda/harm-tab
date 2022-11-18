@@ -9,6 +9,7 @@ const Share: React.FC<{}> = _props => {
 
 	return <button
 		className={styles.shareButton}
+		style={{ backgroundImage: `url(img/share.svg)` }}
 		onClick={_ => window.open("?" + serializeDataContextData(dataContext.data))}>
 	</button>
 };

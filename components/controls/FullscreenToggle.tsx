@@ -29,7 +29,7 @@ const FullscreenToggle: React.FC<FullscreenToggleProps> = ({ editorRef }) => {
 		}
 	};
 
-	return <button onClick={toggleFullscreen} className={styles.fullscreenToggle}></button>;
+	return <button onClick={toggleFullscreen} style={{ backgroundImage: `url(img/fullscreen.svg)` }} className={styles.fullscreenToggle}></button>;
 };
 
 export { FullscreenToggle };
