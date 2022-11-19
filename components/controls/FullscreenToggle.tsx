@@ -1,7 +1,7 @@
 import { useState } from "react";
-import useEventListener from "../../data/useEventListener";
+import { IconButton } from "./IconButton";
 
-import styles from "../../styles/FullscreenToggle.module.scss";
+import useEventListener from "../../data/useEventListener";
 
 type FullscreenToggleProps = {
 	editorRef: React.MutableRefObject<HTMLDivElement>,
@@ -29,7 +29,7 @@ const FullscreenToggle: React.FC<FullscreenToggleProps> = ({ editorRef }) => {
 		}
 	};
 
-	return <button onClick={toggleFullscreen} style={{ backgroundImage: `url(img/fullscreen.svg)` }} className={styles.fullscreenToggle}></button>;
+	return <IconButton icon="./img/fullscreen.svg" onClick={toggleFullscreen} />;
 };
 
 export { FullscreenToggle };

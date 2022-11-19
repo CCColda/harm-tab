@@ -1,0 +1,21 @@
+.iconButton {
+	position: relative;
+
+	background: transparent;
+
+	border: none;
+
+	height: 2rem;
+	width: 2rem;
+
+	margin: 0.25rem;
+
+	transition: 0.2s width, 0.2s height, 0.2s margin;
+
+	&:hover,
+	&.active {
+		margin: 0;
+		width: 2.5rem;
+		height: 2.5rem;
+	}
+}

@@ -1,4 +1,5 @@
 import { DottedNoteDuration, NoteDuration } from "../../data/MusicNote";
+import Image from "../../node_modules/next/image";
 import styles from "../../styles/Note.module.scss";
 
 export type NoteDisplayDuration = NoteDuration | DottedNoteDuration;
@@ -26,7 +27,9 @@ export const Note: React.FC<{ duration: NoteDisplayDuration }> = props => {
 	return <span className={styles.noteComponent}>{
 		displayNote
 			? <>
-				<span className={styles.note} style={{ backgroundImage: `url(img/${displayNote}n.svg)` }}></span>
+				<span className={styles.note}>
+					<Image src={`./img/${displayNote}n.svg`} layout={"fill"} />
+				</span>
 				{displayDot && <span className={styles.dot}></span>}
 			</>
 			: <>

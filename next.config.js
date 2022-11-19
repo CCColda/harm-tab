@@ -45,5 +45,10 @@ module.exports = async () => {
     reactStrictMode: true,
     swcMinify: true,
     assetPrefix: is_dev ? undefined : "/" + prefix + "/",
+    experimental: {
+      images: {
+        unoptimized: true
+      }
+    }
   }
 };

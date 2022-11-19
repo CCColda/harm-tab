@@ -20,12 +20,11 @@
 	}
 
 	.note {
+		position: relative;
 		display: inline-block;
 
 		width: 2rem;
 		height: 2rem;
-
-		background-size: contain;
 	}
 
 	.dot {
