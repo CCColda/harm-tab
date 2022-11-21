@@ -1,0 +1,23 @@
+.formTextInput {
+
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+
+	border-radius: 5px;
+
+	span {
+		display: block;
+		padding-right: 0.5rem;
+		border-right: 2px solid white;
+	}
+
+	input {
+		margin: 0.5rem;
+		padding: 0.5rem;
+		border-radius: 5px;
+		outline: none;
+		border: none;
+	}
+}
