@@ -1,6 +1,6 @@
 {
   "name": "harm-tab",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "license": "UNLICENSED",
   "author": "CCCOlda",
@@ -13,16 +13,21 @@
     "deploy": "gh-pages -d out -t true"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.0",
     "@tonejs/midi": "^2.0.28",
     "abcjs": "^6.0.4",
     "next": "12.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-redux": "^8.0.5",
+    "redux": "^4.2.0",
     "tone": "^14.7.77"
   },
   "devDependencies": {
     "@types/node": "^18.7.2",
     "@types/react": "^18.0.17",
+    "@types/react-redux": "^7.1.24",
+    "@types/redux": "^3.6.0",
     "eslint": "8.21.0",
     "eslint-config-next": "12.2.4",
     "gh-pages": "^4.0.0",

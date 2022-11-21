@@ -1,6 +1,6 @@
 import { Data } from "../types/Data";
 import { DiaHarm } from "../types/Harmonica";
-import { DefaultData } from "./Data";
+import { DefaultData } from "./DefaultData";
 
 const SOUND_IDENTIFIERS = Object.freeze(
 	Array(10 * 4 * 2).fill(0).map((_, i) => String.fromCharCode("+".charCodeAt(0) + i))
@@ -58,8 +58,8 @@ function parseDiaHarmLayout(layoutString: string): DiaHarm.Layout {
 }
 
 export function serializeDataContextData(data: Data): string | undefined {
-	const layout = data.memory.layouts.find(v => v.label == data.saved.sheet.layout);
-	const sheet = data.saved.sheet;
+	const layout = data.layouts.find(v => v.label == data.sheet.layout);
+	const sheet = data.sheet;
 
 	if (!layout) return undefined;
 
@@ -116,57 +116,51 @@ export function parseDataContextData(dataString: string): Data {
 
 				return {
 					...DefaultData,
-					memory: {
-						...DefaultData.memory,
-						layouts: [
-							{
-								type: "diatonic",
-								sign: dataSegments[0].slice(1),
-								label,
-								layout,
-								key
-							}
-						],
-					},
-					saved: {
-
-						sheet: {
+					layouts: [
+						{
 							type: "diatonic",
-							title: sheetSegment[0],
-							metre: sheetSegment[1],
-							key: sheetSegment[2],
-							chords: positionsSegment.map(chord => {
-								if (chord.startsWith(BAR)) {
-									return {
-										type: "bar"
-									};
-								}
-								else if (chord.startsWith(SILENCE)) {
-									return {
-										type: "silence",
-										duration: chord.slice(SILENCE.length)
-									};
-								}
-								else {
-									const notes = chord.slice(0, 1).split(LAYOUT_NOTE_SEPARATOR);
-
-									return {
-										type: "chord",
-										notes: notes.map(note => {
-											const parsed = parseDiaHarmPos(note);
-
-											return {
-												...parsed,
-												note: layout[parsed.position].find(w => w.bend == parsed.bend && w.dir == parsed.dir).note,
-											};
-										}),
-										duration: chord.slice(1)
-									};
-								}
-
-							}),
-							layout: label
+							sign: dataSegments[0].slice(1),
+							label,
+							layout,
+							key
 						}
+					],
+					sheet: {
+						type: "diatonic",
+						title: sheetSegment[0],
+						metre: sheetSegment[1],
+						key: sheetSegment[2],
+						chords: positionsSegment.map(chord => {
+							if (chord.startsWith(BAR)) {
+								return {
+									type: "bar"
+								};
+							}
+							else if (chord.startsWith(SILENCE)) {
+								return {
+									type: "silence",
+									duration: chord.slice(SILENCE.length)
+								};
+							}
+							else {
+								const notes = chord.slice(0, 1).split(LAYOUT_NOTE_SEPARATOR);
+
+								return {
+									type: "chord",
+									notes: notes.map(note => {
+										const parsed = parseDiaHarmPos(note);
+
+										return {
+											...parsed,
+											note: layout[parsed.position].find(w => w.bend == parsed.bend && w.dir == parsed.dir).note,
+										};
+									}),
+									duration: chord.slice(1)
+								};
+							}
+
+						}),
+						layout: label
 					}
 				};
 			}

@@ -1,6 +1,6 @@
-import { DottedNoteDuration, NoteDuration } from "../../data/MusicNote";
-import Image from "../../node_modules/next/image";
-import styles from "../../styles/Note.module.scss";
+import { DottedNoteDuration, NoteDuration } from "../data/MusicNote";
+import Image from "../node_modules/next/image";
+import styles from "../styles/Note.module.scss";
 
 export type NoteDisplayDuration = NoteDuration | DottedNoteDuration;
 

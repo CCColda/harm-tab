@@ -2,19 +2,18 @@ import { FC, FormEventHandler, useContext } from 'react';
 
 import { Note, NoteDisplayDuration } from './Note';
 
-import styles from '../../styles/NoteLengths.module.scss';
-import { DataContext } from '../contexts/DataContext';
-import { NoteDuration } from '../../data/MusicNote';
-
-export type NoteLengthsProps = {
-
-};
+import styles from '../styles/NoteLengths.module.scss';
+import { NoteDuration } from '../data/MusicNote';
+import { useDispatch } from 'react-redux';
 
 const NOTES = Object.freeze([
 	{ symbol: "𝅘𝅥𝅱", value: 1, display: "1/64" },
 	{ symbol: "𝅘𝅥𝅰", value: 2, display: "1/32" },
+	{ symbol: "𝅘𝅥𝅰.", value: 3, display: "3/64" },
 	{ symbol: "𝅘𝅥𝅯", value: 4, display: "1/16" },
+	{ symbol: "𝅘𝅥𝅯.", value: 6, display: "3/32" },
 	{ symbol: "𝅘𝅥𝅮", value: 8, display: "1/8", default: true },
+	{ symbol: "𝅘𝅥𝅮.", value: 12, display: "3/16" },
 	{ symbol: "𝅘𝅥", value: 16, display: "1/4" },
 	{ symbol: "𝅘𝅥.", value: 24, display: "3/8" },
 	{ symbol: "𝅗𝅥", value: 32, display: "1/2" },
@@ -23,15 +22,11 @@ const NOTES = Object.freeze([
 	{ symbol: "𝅝.", value: 96, display: "3/2" },
 ]);
 
-const NoteLengths: FC<NoteLengthsProps> = (props) => {
-	const dataContext = useContext(DataContext);
-
+const NoteLengths: FC<{}> = _props => {
+	const dispatch = useDispatch();
 
 	const onChange: FormEventHandler<HTMLDivElement> = ev =>
-		dataContext.fn.memory.insert.setDuration(
-			Number((ev.target as HTMLInputElement).value) as NoteDuration
-		);
-
+		dispatch({ type: "insert/setDuration", payload: Number((ev.target as HTMLInputElement).value) as NoteDuration });
 
 	return <label className={styles.notelengths}>
 		<input type="checkbox" />

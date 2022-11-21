@@ -1,29 +1,31 @@
 import { FC, useContext, useState } from "react";
-import { MusicPlayerData, Play } from "../../data/MusicPlayer";
+import { MusicPlayerData, Play } from "../data/MusicPlayer";
 
-import { DataContext } from "../contexts/DataContext";
-import { ToneContext } from "../contexts/ToneContext";
+import { ToneContext } from "./ToneContext";
 
-import styles from "../../styles/MusicControl.module.scss";
+import styles from "../styles/MusicControl.module.scss";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
+import { Data } from "../types/Data";
+import { useDispatch } from "react-redux";
 
 const DEFAULT_CONTROLS =
     Object.freeze({ promise: null as Promise<boolean>, stop: (() => { }) as () => void });
 
 const MusicControl: FC<{}> = _ => {
-    const dataContext = useContext(DataContext);
     const Tone = useContext(ToneContext);
+    const sheet = useSelector<RootState, Data["sheet"]>(state => state.sheet.value);
+    const dispatch = useDispatch();
 
     const [controls, setControls] = useState(DEFAULT_CONTROLS);
     const [isPlaying, setIsPlaying] = useState(false);
 
     const startPlaying = () => {
-        if (dataContext.data.saved.sheet.type == "diatonic"
-            && !isPlaying) {
-
+        if (sheet.type == "diatonic" && !isPlaying) {
             setIsPlaying(true);
 
             const musicData: MusicPlayerData = {
-                chords: dataContext.data.saved.sheet.chords.map(chord => {
+                chords: sheet.chords.map(chord => {
                     switch (chord.type) {
                         case "bar":
                             return [];
@@ -33,15 +35,15 @@ const MusicControl: FC<{}> = _ => {
                             return chord.notes.map(v => v.note);
                     }
                 }),
-                durations: dataContext.data.saved.sheet.chords.map(v => v.type == "bar" ? "" : v.duration),
-                chordCallback: idx => dataContext.fn.memory.setHighlighted(idx)
+                durations: sheet.chords.map(v => v.type == "bar" ? "" : v.duration),
+                chordCallback: idx => dispatch({ type: "indices/setHighlighted", payload: idx })
             };
 
             const newControls = Play(Tone, musicData);
 
             newControls.promise?.then(v => {
                 setIsPlaying(false);
-                dataContext.fn.memory.setHighlighted(null);
+                dispatch({ type: "indices/resetHighlighted" });
             });
 
             setControls(newControls);

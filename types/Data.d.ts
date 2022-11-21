@@ -22,16 +22,14 @@ export namespace DataSheets {
 }
 
 export interface Data {
-	memory: {
-		insert: {
-			duration: NoteDuration,
-			mode: "chord" | "note"
-		},
+	insert: {
+		duration: NoteDuration,
+		mode: "chord" | "note"
+	},
+	indices: {
 		highlightedIndex: number | null,
 		selectedIndex: number | null,
-		layouts: HarmLayout[],
 	},
-	saved: {
-		sheet: DataSheets.Sheet
-	}
+	layouts: HarmLayout[],
+	sheet: DataSheets.Sheet,
 }

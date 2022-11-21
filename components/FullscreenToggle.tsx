@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IconButton } from "./IconButton";
 
-import useEventListener from "../../data/useEventListener";
+import useEventListener from "../data/useEventListener";
 
 type FullscreenToggleProps = {
 	editorRef: React.MutableRefObject<HTMLDivElement>,

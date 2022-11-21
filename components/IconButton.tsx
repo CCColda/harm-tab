@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react";
-import Image from "../../node_modules/next/image";
+import Image from "../node_modules/next/image";
 
-import styles from "../../styles/IconButton.module.scss";
+import styles from "../styles/IconButton.module.scss";
 
 type IconButtonProps = {
 	onClick: MouseEventHandler<HTMLButtonElement>,
