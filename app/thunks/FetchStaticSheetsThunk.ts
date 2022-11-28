@@ -9,7 +9,7 @@ type StaticSheetFile = {
 }
 
 export const fetchStaticSheets = createAsyncThunk("savedSheets/fetchStatic", async (path: string, _thunkAPI) => {
-	Logger.log("SL:S", "Dispatching fetch");
+	Logger.log("T:STS", "Dispatching fetch");
 
 	const data = await fetch(path, { method: "GET", headers: { "Accept": "application/json" } });
 	const sheetsObject: StaticSheetFile = data.status == 200
@@ -19,7 +19,7 @@ export const fetchStaticSheets = createAsyncThunk("savedSheets/fetchStatic", asy
 	if (sheetsObject.sheets.length) {
 		const parsedSheets = sheetsObject.sheets.map(parseSheet);
 
-		Logger.log("SL:S", "Parsed " + parsedSheets.length + " static sheets.");
+		Logger.log("T:STS", "Loaded " + parsedSheets.length + " static sheet(s).");
 		return parsedSheets;
 	}
 

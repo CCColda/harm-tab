@@ -30,9 +30,9 @@ export const DynamicSheetCard: React.FC<DynamicSheetCardProps> = ({ sheet }) => 
 	const onDelete = () => { console.log("delete"); };
 
 	const actions = [
-		<IconButton key="share" icon="/img/share.svg" onClick={onShare}></IconButton>,
-		<IconButton key="duplicate" icon="/img/16n.svg" onClick={onDuplicate}></IconButton>,
-		<IconButton key="delete" icon="/img/32n.svg" onClick={onDelete}></IconButton>
+		<IconButton key="share" icon="/img/copy.svg" onClick={onShare}></IconButton>,
+		<IconButton key="duplicate" icon="/img/duplicate.svg" onClick={onDuplicate}></IconButton>,
+		<IconButton key="delete" icon="/img/bin.svg" onClick={onDelete}></IconButton>
 	];
 
 	return <SheetCard sheet={sheet} actions={actions} onOpen={onOpen}></SheetCard>

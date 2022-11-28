@@ -25,7 +25,7 @@ export const SavedSheetsSlice = createSlice({
 			if (action.payload.length)
 				state.value = [
 					...state.value,
-					...action.payload.filter(v => !state.value.some(w => v.sheet.title == w.sheet.title && v.sheet.key == w.sheet.key && v.sheet.layout != w.sheet.layout))
+					...action.payload.filter(v => !state.value.some(w => v.sheet.title == w.sheet.title && v.sheet.key == w.sheet.key && v.sheet.layout == w.sheet.layout))
 						.map(v => ({ type: "static", sheet: v.sheet }))
 				] as SavedSheetSliceType[];
 		});

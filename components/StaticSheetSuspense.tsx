@@ -1,18 +1,17 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../app/store";
-
-import { TStatus } from "../app/slices/StatusSlice";
-import { FetchSuspense } from "./FetchSuspense";
+import { useDispatch } from "react-redux";
 import { fetchStaticSheets } from "../app/thunks/FetchStaticSheetsThunk";
+import { useEffect } from "react";
 
-const StaticSheetSuspense: React.FC<React.PropsWithChildren<{ sheetPath: string }>> = props =>
-	<FetchSuspense
-		fetchfn={fetchStaticSheets(props.sheetPath)}
-		fetchPrerequisites={[props.sheetPath]}
-		blockingSelector={false}
-		statusSelector={useSelector<RootState, TStatus>(state => state.status.value.fetchStaticSheetsStatus)}
-	>
-		{props.children}
-	</FetchSuspense>
+
+const StaticSheetSuspense: React.FC<React.PropsWithChildren<{ sheetPath: string }>> = props => {
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(fetchStaticSheets(props.sheetPath) as any);
+	}, [dispatch, props.sheetPath]);
+
+	return <>{props.children}</>;
+}
+
 
 export { StaticSheetSuspense };

@@ -6,7 +6,7 @@ import { fetchStaticSheets } from "../thunks/FetchStaticSheetsThunk";
 import { loadFromURL } from "../thunks/URLLoaderThunk";
 
 const extend = (old: HarmLayout[], newLayouts: HarmLayout[]) =>
-	[...old, ...newLayouts.filter(v => old.some(w => v.label != w.label && v.type != w.type))];
+	[...old, ...newLayouts.filter(v => !old.some(w => v.label == w.label && v.type == w.type))];
 
 export const LayoutsSlice = createSlice({
 	name: 'layouts',

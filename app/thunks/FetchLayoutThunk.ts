@@ -3,7 +3,7 @@ import { LoadHarmonicaLayouts } from "../../data/Harmonica";
 import Logger from "../../data/Logger";
 
 export const fetchLayout = createAsyncThunk("layouts/fetchFromFile", async (path: string, _thunkAPI) => {
-	Logger.log("SL:L", "Dispatching fetch");
+	Logger.log("T:FLO", "Dispatching fetch");
 
 	const data = await fetch(path, { method: "GET", headers: { "Accept": "application/json" } });
 	const text = data.status == 200 ? await data.text() : "";
@@ -11,7 +11,7 @@ export const fetchLayout = createAsyncThunk("layouts/fetchFromFile", async (path
 	if (text) {
 		const layouts = LoadHarmonicaLayouts(text);
 
-		Logger.log("SL:L", "Set " + layouts.length + " layouts.");
+		Logger.log("T:FLO", "Loaded " + layouts.length + " layouts.");
 		return layouts;
 	}
 
