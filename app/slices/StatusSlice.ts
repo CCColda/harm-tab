@@ -1,32 +1,42 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchLayout } from "../thunks/FetchLayoutThunk";
+import { fetchStaticSheets } from "../thunks/FetchStaticSheetsThunk";
 import { loadFromURL } from "../thunks/URLLoaderThunk";
 
-export type TStatus = "initial" | "pending" | "done";
+export type TStatus = "initial" | "pending" | "done" | "error";
+
+type TStatusValue = {
+	loadFromURLStatus: TStatus,
+	fetchLayoutsStatus: TStatus,
+	fetchStaticSheetsStatus: TStatus,
+}
 
 export const StatusSlice = createSlice({
 	name: 'layouts',
 	initialState: {
 		value: {
-			loadFromURLStatus: "initial" as TStatus,
-			fetchLayoutsStatus: "initial" as TStatus
-		}
+			loadFromURLStatus: "initial",
+			fetchLayoutsStatus: "initial",
+			fetchStaticSheetsStatus: "initial",
+		} as TStatusValue
 	},
 	reducers: {},
 
 	extraReducers: builder => {
-		builder.addCase(loadFromURL.fulfilled, (state) => {
-			state.value.loadFromURLStatus = "done";
-		});
-		builder.addCase(loadFromURL.pending, (state) => {
-			state.value.loadFromURLStatus = "pending";
-		});
+		const addCasesFor = (thunk: ReturnType<typeof createAsyncThunk>, key: keyof TStatusValue) => {
+			builder.addCase(thunk.fulfilled, state => {
+				state.value[key] = "done";
+			});
+			builder.addCase(thunk.pending, state => {
+				state.value[key] = "pending";
+			});
+			builder.addCase(thunk.rejected, state => {
+				state.value[key] = "error";
+			});
+		}
 
-		builder.addCase(fetchLayout.fulfilled, (state) => {
-			state.value.fetchLayoutsStatus = "done";
-		});
-		builder.addCase(fetchLayout.pending, (state) => {
-			state.value.fetchLayoutsStatus = "pending";
-		});
+		addCasesFor(fetchLayout, "fetchLayoutsStatus");
+		addCasesFor(fetchStaticSheets, "fetchStaticSheetsStatus");
+		addCasesFor(loadFromURL, "loadFromURLStatus");
 	}
 });

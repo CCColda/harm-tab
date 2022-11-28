@@ -11,6 +11,8 @@ import { RootState } from "../app/store";
 import { Data } from "../types/Data";
 import { useDispatch } from "react-redux";
 
+const X_MARGIN = 10; /* px */
+
 export const EditorSheet: React.FC<{}> = _props => {
 	const sheet = useSelector<RootState, Data["sheet"]>(state => state.sheet.value);
 	const indices = useSelector<RootState, number[]>(state => Object.values(state.indices.value));
@@ -19,7 +21,7 @@ export const EditorSheet: React.FC<{}> = _props => {
 	const [sheetWidth, setSheetWidth] = useState(0);
 	const mainRef = useRef<HTMLDivElement | null>(null);
 
-	const updateWidth = () => mainRef && setSheetWidth(mainRef.current.getBoundingClientRect().width)
+	const updateWidth = () => mainRef && setSheetWidth(mainRef.current.getBoundingClientRect().width - X_MARGIN)
 
 	useEventListener(
 		window,

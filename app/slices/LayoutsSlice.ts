@@ -1,7 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { DefaultData } from "../../data/DefaultData";
+import { HarmLayout } from "../../types/Harmonica";
 import { fetchLayout } from "../thunks/FetchLayoutThunk";
+import { fetchStaticSheets } from "../thunks/FetchStaticSheetsThunk";
 import { loadFromURL } from "../thunks/URLLoaderThunk";
+
+const extend = (old: HarmLayout[], newLayouts: HarmLayout[]) =>
+	[...old, ...newLayouts.filter(v => old.some(w => v.label != w.label && v.type != w.type))];
 
 export const LayoutsSlice = createSlice({
 	name: 'layouts',
@@ -13,20 +18,19 @@ export const LayoutsSlice = createSlice({
 			state.value = action.payload;
 		},
 		add: (state, action) => {
-			state.value = [...state.value, ...action.payload];
+			state.value = extend(state.value, action.payload);
 		},
 	},
 
 	extraReducers: builder => {
 		builder.addCase(fetchLayout.fulfilled, (state, action) => {
-			for (const newLayout of action.payload)
-				if (!state.value.some(v => v.label == newLayout.label && v.type == newLayout.type))
-					state.value.push(newLayout);
+			state.value = extend(state.value, action.payload);
 		});
 		builder.addCase(loadFromURL.fulfilled, (state, action) => {
-			for (const newLayout of action.payload.layouts)
-				if (!state.value.some(v => v.label == newLayout.label && v.type == newLayout.type))
-					state.value.push(newLayout);
+			state.value = extend(state.value, action.payload.layouts);
+		});
+		builder.addCase(fetchStaticSheets.fulfilled, (state, action) => {
+			state.value = extend(state.value, action.payload.map(v => v.layouts).flat());
 		});
 	}
 });

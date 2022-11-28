@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { IndicesSlice } from './slices/IndicesSlice';
 import { InsertSlice } from './slices/InsertSlice';
 import { LayoutsSlice } from './slices/LayoutsSlice';
+import { SavedSheetsSlice } from './slices/SavedSheetsSlice';
 import { SheetSlice } from './slices/SheetSlice';
 import { StatusSlice } from './slices/StatusSlice';
 
@@ -12,6 +13,7 @@ const store = configureStore({
 		insert: InsertSlice.reducer,
 		sheet: SheetSlice.reducer,
 		status: StatusSlice.reducer,
+		savedSheets: SavedSheetsSlice.reducer,
 	}
 });
 

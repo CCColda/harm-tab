@@ -100,7 +100,7 @@ export function serializeSheet(layouts: HarmLayout[], sheet: DataSheets.Sheet): 
 }
 
 
-export function parseSheet(dataString: string) {
+export function parseSheet(dataString: string): { layouts: HarmLayout[], sheet: DataSheets.Sheet } {
 	const decoded = decodeURI(dataString);
 	try {
 		switch (decoded[0]) {
