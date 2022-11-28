@@ -38,13 +38,15 @@ module.exports = async () => {
 
   const prefix = repository_match?.[1] ?? getPackageName();
 
+  const base = is_dev ? undefined : "/" + prefix;
+
   console.log(`Developer mode: ${is_dev ? "on" : "off"}`);
-  console.log(`Using assetPrefix "${prefix}".`);
+  console.log(`Using basePath "${base}".`);
 
   return {
     reactStrictMode: true,
     swcMinify: true,
-    assetPrefix: is_dev ? undefined : "/" + prefix + "/",
+    basePath: base,
     experimental: {
       images: {
         unoptimized: true

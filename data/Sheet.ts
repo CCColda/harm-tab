@@ -67,6 +67,31 @@ export const DiatonicSheet = (() => {
 		].join("\n");
 	}
 
+	const toPreviewABC = (diatonicSheet: TDiaHarmSheet, maxBars: number = 2) => {
+		const nthBar = diatonicSheet.chords.map((v, i) => ({ v, i })).filter(({ v }) => v.type == "bar")[maxBars - 1]?.i;
+
+		const chords = nthBar ? diatonicSheet.chords.slice(0, nthBar) : diatonicSheet.chords;
+
+		const notes = chords.map(chord => {
+			switch (chord.type) {
+				case "bar":
+					return "|";
+				case "silence":
+					return "z" + chord.duration;
+				case "chord":
+					return "[" + chord.notes.map(w => w.note).join("") + "]" + chord.duration;
+			}
+		});
+
+		return [
+			`X:1`,
+			`M:${diatonicSheet.metre}`,
+			`K:${diatonicSheet.key}`,
+			`L:1/64`,
+			notes.join(" "),
+		].join("\n");
+	}
+
 	const addNote = (sheet: TDiaHarmSheet, notes: DiaHarm.SoundPosition[], duration: string, idx?: number) =>
 		addChord(sheet, [{ type: "chord", notes, duration }], idx);
 
@@ -101,6 +126,7 @@ export const DiatonicSheet = (() => {
 
 	return Object.freeze({
 		toABC,
+		toPreviewABC,
 		addNote,
 		addSilence,
 		addBar,

@@ -1,5 +1,5 @@
-import { Data } from "../types/Data";
-import { DiaHarm } from "../types/Harmonica";
+import { Data, DataSheets } from "../types/Data";
+import { DiaHarm, HarmLayout } from "../types/Harmonica";
 import { DefaultData } from "./DefaultData";
 
 const SOUND_IDENTIFIERS = Object.freeze(
@@ -57,9 +57,8 @@ function parseDiaHarmLayout(layoutString: string): DiaHarm.Layout {
 	return Object.fromEntries(layoutEntries);
 }
 
-export function serializeDataContextData(data: Data): string | undefined {
-	const layout = data.layouts.find(v => v.label == data.sheet.layout);
-	const sheet = data.sheet;
+export function serializeSheet(layouts: HarmLayout[], sheet: DataSheets.Sheet): string | undefined {
+	const layout = layouts.find(v => v.label == sheet.layout);
 
 	if (!layout) return undefined;
 
@@ -101,7 +100,7 @@ export function serializeDataContextData(data: Data): string | undefined {
 }
 
 
-export function parseDataContextData(dataString: string): Data {
+export function parseSheet(dataString: string) {
 	const decoded = decodeURI(dataString);
 	try {
 		switch (decoded[0]) {
@@ -115,7 +114,6 @@ export function parseDataContextData(dataString: string): Data {
 				const positionsSegment = dataSegments[5].split(LAYOUT_MINOR_SEPARATOR);
 
 				return {
-					...DefaultData,
 					layouts: [
 						{
 							type: "diatonic",
@@ -166,18 +164,23 @@ export function parseDataContextData(dataString: string): Data {
 			}
 			case "C": {
 				return {
-					...DefaultData
+					layouts: DefaultData.layouts,
+					sheet: DefaultData.sheet
 				};
 			}
 			default: {
 				return {
-					...DefaultData
+					layouts: DefaultData.layouts,
+					sheet: DefaultData.sheet
 				};
 			}
 		}
 	}
 	catch (exc) {
 		console.error("Error while loading: ", exc);
-		return { ...DefaultData };
+		return {
+			layouts: DefaultData.layouts,
+			sheet: DefaultData.sheet
+		};
 	}
 }

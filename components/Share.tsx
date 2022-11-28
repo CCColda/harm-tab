@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
-import { serializeDataContextData } from "../data/Serializer";
+import { serializeSheet } from "../data/Serializer";
 import { Data } from "../types/Data";
 import { IconButton } from "./IconButton";
 
@@ -14,7 +14,7 @@ const Share: React.FC<{}> = _props => {
 
 	return <IconButton
 		icon="./img/share.svg"
-		onClick={_ => window.open("?" + serializeDataContextData(data))}
+		onClick={_ => window.open("?" + serializeSheet(data))}
 	/>
 };
 
