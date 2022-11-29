@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { DefaultData } from "../../data/DefaultData";
 import { HarmLayout } from "../../types/Harmonica";
+import { loadDynamicSheets } from "../thunks/DynamicSheetsLoaderThunk";
 import { fetchLayout } from "../thunks/FetchLayoutThunk";
 import { fetchStaticSheets } from "../thunks/FetchStaticSheetsThunk";
 import { loadFromURL } from "../thunks/URLLoaderThunk";
@@ -31,6 +32,9 @@ export const LayoutsSlice = createSlice({
 		});
 		builder.addCase(fetchStaticSheets.fulfilled, (state, action) => {
 			state.value = extend(state.value, action.payload.map(v => v.layouts).flat());
+		});
+		builder.addCase(loadDynamicSheets.fulfilled, (state, action) => {
+			state.value = extend(state.value, action.payload.map(([_, v]) => v.layouts).flat());
 		});
 	}
 });

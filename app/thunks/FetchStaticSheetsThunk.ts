@@ -17,7 +17,16 @@ export const fetchStaticSheets = createAsyncThunk("savedSheets/fetchStatic", asy
 		: { sheets: [] };
 
 	if (sheetsObject.sheets.length) {
-		const parsedSheets = sheetsObject.sheets.map(parseSheet);
+		const parsedSheets = sheetsObject.sheets
+			.map(v => {
+				try {
+					return parseSheet(v);
+				}
+				catch {
+					return null;
+				}
+			})
+			.filter(v => v !== null);
 
 		Logger.log("T:STS", "Loaded " + parsedSheets.length + " static sheet(s).");
 		return parsedSheets;

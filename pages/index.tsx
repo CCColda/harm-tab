@@ -5,12 +5,13 @@ import { DynamicSheetCard } from '../components/DynamicSheetCard';
 import { LayoutSuspense } from '../components/LayoutSuspense';
 import { MusicSheet } from '../components/MusicSheet';
 import { SheetCard } from '../components/SheetCard';
-import { StaticSheetSuspense } from '../components/StaticSheetSuspense';
+import { SavedSheetSuspense } from '../components/SavedSheetSuspense';
 import { DiatonicSheet } from '../data/Sheet';
 import useEventListener from '../data/useEventListener';
 
 import { DataSheets } from '../types/Data';
 import { DiaHarm } from '../types/Harmonica';
+import { SavedSheetSliceType } from '../app/slices/SavedSheetsSlice';
 
 const testABC = `
 X: 1
@@ -22,14 +23,16 @@ K: Gmin
 
 
 export default function Home() {
-	const sheetSelector = useSelector<RootState, DataSheets.Sheet[]>(state => state.savedSheets.value.map(v => v.sheet));
+	const sheetSelector = useSelector<RootState, SavedSheetSliceType[]>(state => state.savedSheets.value);
 	return <>
-		<StaticSheetSuspense sheetPath='/sheets.json'>
+		<SavedSheetSuspense sheetPath='/sheets.json'>
 			{
-				sheetSelector.map((v, i) =>
-					<DynamicSheetCard key={i} sheet={v}></DynamicSheetCard>
-				)
+				sheetSelector
+					.filter(v => v.type == "dynamic")
+					.map((v, i) =>
+						<DynamicSheetCard key={i} sheet={v.sheet} identifier={(v as { identifier: string }).identifier}></DynamicSheetCard>
+					)
 			}
-		</StaticSheetSuspense>
+		</SavedSheetSuspense>
 	</>
 }

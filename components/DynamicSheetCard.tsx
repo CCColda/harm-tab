@@ -11,6 +11,7 @@ import { SheetCard } from "./SheetCard"
 
 export type DynamicSheetCardProps = {
 	sheet: DataSheets.Sheet,
+	identifier: string,
 }
 
 export const DynamicSheetCard: React.FC<DynamicSheetCardProps> = ({ sheet }) => {
@@ -34,6 +35,8 @@ export const DynamicSheetCard: React.FC<DynamicSheetCardProps> = ({ sheet }) => 
 		<IconButton key="duplicate" icon="/img/duplicate.svg" onClick={onDuplicate}></IconButton>,
 		<IconButton key="delete" icon="/img/bin.svg" onClick={onDelete}></IconButton>
 	];
+
+	console.log(sheet);
 
 	return <SheetCard sheet={sheet} actions={actions} onOpen={onOpen}></SheetCard>
 }

@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Logger from "../../data/Logger";
+import { loadDynamicSheets } from "../thunks/DynamicSheetsLoaderThunk";
 import { fetchLayout } from "../thunks/FetchLayoutThunk";
 import { fetchStaticSheets } from "../thunks/FetchStaticSheetsThunk";
 import { loadFromURL } from "../thunks/URLLoaderThunk";
 
 export type TStatus = "initial" | "pending" | "done" | "error";
 
-type TStatusValue = {
-	loadFromURLStatus: TStatus,
-	fetchLayoutsStatus: TStatus,
-	fetchStaticSheetsStatus: TStatus,
-}
+type TStatusValue = Record<
+	"loadFromURLStatus" | "fetchLayoutsStatus" | "fetchStaticSheetsStatus" | "loadDynamicSheetsStatus",
+	TStatus
+>;
 
 export const StatusSlice = createSlice({
 	name: 'layouts',
@@ -19,6 +19,7 @@ export const StatusSlice = createSlice({
 			loadFromURLStatus: "initial",
 			fetchLayoutsStatus: "initial",
 			fetchStaticSheetsStatus: "initial",
+			loadDynamicSheetsStatus: "initial",
 		} as TStatusValue
 	},
 	reducers: {},
@@ -42,5 +43,6 @@ export const StatusSlice = createSlice({
 		addCasesFor(fetchLayout, "fetchLayoutsStatus");
 		addCasesFor(fetchStaticSheets, "fetchStaticSheetsStatus");
 		addCasesFor(loadFromURL, "loadFromURLStatus");
+		addCasesFor(loadDynamicSheets, "loadDynamicSheetsStatus");
 	}
 });
